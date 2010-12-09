@@ -1,0 +1,8 @@
+# YAML
+
+default:
+    directory: ./test/log
+    target: ./archive
+    rotate: 5
+    type: weekly
+    max size: 20M
