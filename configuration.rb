@@ -16,6 +16,12 @@ module RotateAlternative
         #
         
         @directory
+        
+        ##
+        # Holds configuration data.
+        #
+        
+        @data
     
         ##
         # Constructor.
@@ -25,6 +31,7 @@ module RotateAlternative
         #
         
         def initialize(directory)
+            # TODO: this should handle configuration inheritance
             @directory = directory
         end
         
@@ -37,11 +44,41 @@ module RotateAlternative
         end
         
         ##
+        # Returns configuration data.
+        #
+
+        def data
+            if @data.nil?
+                data = self.configuration[:dirs][@directory]
+                @data = { }
+                
+                # Converts strings to symbols
+                data.each_pair do |key, value|
+                    @data[key.to_sym] = value
+                end
+                
+                self.handle_inheritance!
+            end
+            
+            return @data
+        end
+        
+        ##
+        # Handles configuration inheritance.
+        #
+
+        def handle_ihneritance!
+            if @data.include? :parent
+                @data.merge! self.class::new(@data[:parent]).data
+            end
+        end
+        
+        ##
         # Returns some item.
         #
         
         def [](name)
-            self.configuration[@directory][name]
+            self.data[name]
         end
         
         ##
@@ -93,6 +130,14 @@ module RotateAlternative
         end
         
         ##
+        # Traverses through each directory configuration. 
+        # (Shortcut for instace call.)
+        
+        def self.each_directory(&block)
+            self::get.each_directory(&block)
+        end
+        
+        ##
         # Opens the file.
         # 
         
@@ -101,12 +146,12 @@ module RotateAlternative
             @data = { }
             
             # Converts strings to symbols
-            data.each_pair do |name, dir|
-                dir_data = { }
-                @data[name.to_sym]= dir_data
+            data.each_pair do |name, section|
+                section_data = { }
+                @data[name.to_sym]= section_data
                 
-                dir.each_pair do |key, value|
-                    dir_data[key.to_sym] = value
+                section.each_pair do |key, value|
+                    section_data[key.to_sym] = value
                 end
             end
         end
@@ -135,6 +180,20 @@ module RotateAlternative
             @data.each_pair do |name, dir|
                 yield Directory::new(name, dir)
             end
+        end
+        
+        ##
+        # Looks for directory in configuration.
+        #
+        
+        def find_path(path)
+            @data.each_pair do |name, dir|
+                if dir[:directory] == path
+                    return Directory::new(name, dir)
+                end
+            end
+            
+            return nil
         end
         
     end

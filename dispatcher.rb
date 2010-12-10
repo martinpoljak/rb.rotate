@@ -1,4 +1,5 @@
 # encoding: utf-8
+require "configuration"
 
 module RotateAlternative
 
@@ -9,35 +10,18 @@ module RotateAlternative
     class Dispatcher
         
         ##
-        # Internal cache of the global configuration.
-        #
-        
-        @configuration
-    
-        ##
         # Runs the rotate session.
         #
         
         def run
-            self.configuration.each_directory do |name, directory|
-                directory.each_file do |file|
-                    
-                end
-            end
-        end
-
-        ##
-        # Returns the global configuration instance.
-        #
-        
-        def configuration
-            if @configuration.nil?
-                @configuration = Configuration::new("./rotate.yaml")
-            end
+            # Reads configuration file
+            Configuration::read("./rotate.yaml")
             
-            return @configuration
+            # Process
+            Configuration::each_directory do |directory|
+                directory.rotate!
+            end
         end
-        
-    end
+    end    
     
 end

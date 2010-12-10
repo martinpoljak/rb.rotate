@@ -50,6 +50,18 @@ module RotateAlternative
         
         def configuration
             if @configuration.nil?
+                # If no identifier set, looks for the dir 
+                #  in configuration.
+                if @identifier.nil?
+                    directory = Configuration::find_path(@path)
+                    
+                    if not directory.nil?
+                        @identifier = directory.identifier
+                    else
+                        @identifier = :default
+                    end
+                end
+                
                 @configuration = DirectoryConfiguration::new(@identifier)
             end
             
@@ -60,7 +72,7 @@ module RotateAlternative
         # Returns path to directory.
         #
         # So it get @path or directory from configuration if hasn't 
-        # been set.
+        # been sete.
         #
         
         def path
@@ -79,7 +91,7 @@ module RotateAlternative
             dirpath = self.path
             Dir.open(dirpath) do |dir|
                 dir.each_entry do |item|
-                    filepath = dirpath.dup << "/" item
+                    filepath = dirpath.dup << "/" << item
                     if File.file? filepath
                         yield File::new(self, filepath)
                     end
@@ -95,6 +107,10 @@ module RotateAlternative
             dirpath = self.path
             Dir.open(dirpath) do |dir|
                 dir.each_entry do |item|
+                    if (item == \.) or (item.to_sym == :"..")
+                        next
+                    end
+                    
                     filepath = dirpath.dup << "/" item
                     if File.directory? filepath
                         yield self::new(filepath)
@@ -103,6 +119,18 @@ module RotateAlternative
             end
         end
         
+        ##
+        # Rotates.
+        #
+        
+        def rotate!
+            self.each_directory do |directory|
+                directory.rotate!
+            end
+            self.each_file do |file|
+                file.rotate!
+            end
+        end        
         
     end
     
