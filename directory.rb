@@ -2,6 +2,7 @@
 
 require "configuration"
 require "file"
+require "reader"
 
 module RotateAlternative
 
@@ -87,36 +88,16 @@ module RotateAlternative
         # Traverses through all files in directory.
         #
         
-        def each_file
-            dirpath = self.path
-            Dir.open(dirpath) do |dir|
-                dir.each_entry do |item|
-                    filepath = dirpath.dup << "/" << item
-                    if File.file? filepath
-                        yield File::new(self, filepath)
-                    end
-                end
-            end
+        def each_file(&block)
+            Reader::read(self, :filter => :files, &block)
         end
 
         ##
         # Traverses through all directories in directory.
         #
         
-        def each_directory
-            dirpath = self.path
-            Dir.open(dirpath) do |dir|
-                dir.each_entry do |item|
-                    if (item == \.) or (item.to_sym == :"..")
-                        next
-                    end
-                    
-                    filepath = dirpath.dup << "/" item
-                    if File.directory? filepath
-                        yield self::new(filepath)
-                    end
-                end
-            end
+        def each_directory(&block)
+            Reader::new(self.path, :filter => :dirs, &block)
         end
         
         ##
