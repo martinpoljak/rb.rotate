@@ -132,6 +132,14 @@ module RotateAlternative
         end
         
         ##
+        # Returns record for appropriate file.
+        #
+        
+        def file(path)
+            StateModule::File::new(self.files[path.to_sym])
+        end
+        
+        ##
         # Returns configuration object instance.
         #
         
@@ -168,6 +176,14 @@ module RotateAlternative
             end
             
             ##
+            # Returns file data.
+            #
+            
+            def file(path)
+                @data[:files][path.to_sym]
+            end
+            
+            ##
             # Indicates, file is in archive.
             #
             
@@ -181,6 +197,117 @@ module RotateAlternative
             
             def has_directory?(path)
                 @data[:directories].has_key? path.to_sym
+            end
+            
+            ##
+            # Registers file.
+            #
+            
+            def register_file(path, value = true)
+                self.register_item(:files, path, value)
+            end
+            
+            ##
+            # Unregisters file.
+            #
+            
+            def unregister_file(path)
+                self.unregister_item(:files, path)
+            end
+            
+
+            ##
+            # Registers directory.
+            #
+            
+            def register_directory(path, value = true)
+                self.register_item(:directories, path, value)
+            end
+            
+            ##
+            # Unregisters file.
+            #
+            
+            def unregister_directory(path)
+                self.unregister_item(:directories, path)
+            end
+            
+            ##
+            # Registers item.
+            #
+            
+            def register_item(group, path, value = true)
+                @data[group][path.to_sym] = value
+            end
+            
+            ##
+            # Unregister item.
+            #
+            
+            def unregister_item(group, path)
+                @data[group].delete(path.to_sym)
+            end
+            
+        end
+        
+        ##
+        # Represents file state record.
+        #
+        
+        class File
+
+            ##
+            # Holds the file data.
+            #
+            
+            @data
+            
+            ##
+            # Constructor.
+            #
+            
+            def initialize(data)
+                @data = data
+            end
+            
+            ##
+            # Returns last archival date.
+            #
+            
+            def date
+                @data[:date]
+            end
+            
+            ##
+            # Returns extension.
+            #
+            
+            def extension
+                @data[:filename][:extension]
+            end
+            
+            ##
+            # Returns basename.
+            #
+            
+            def name
+                @data[:filename][:name]
+            end
+            
+            ##
+            # Returns items list.
+            #
+            
+            def items
+                @data[:items]
+            end
+            
+            ##
+            # Sets items list.
+            #
+            
+            def items=(value)
+                @data[:items].replace(value)
             end
             
         end

@@ -1,4 +1,6 @@
 # encoding: utf-8
+
+require "fileutils"
 require "storage"
 
 module RotateAlternative
@@ -14,12 +16,20 @@ module RotateAlternative
         #
         
         @directory
+        attr_reader :directory
         
         ##
         # Indicates file path.
         #
         
         @path
+        attr_reader :path
+        
+        ##
+        # Holds state for the file.
+        #
+        
+        @state
         
         ##
         # Constructor.
@@ -29,6 +39,28 @@ module RotateAlternative
             @directory = directory
             @path = path
         end
+        
+        ##
+        # Removes the file from medium.
+        #
+        
+        def remove!
+            FileUtils.remove_file(@path)
+        end
+        
+        ##
+        # Creates new file.
+        #
+        
+        def create!
+            File.open(@path, "w")
+        end
+        
+        ##
+        # Truncates file.
+        #
+        
+        alias :"truncate!" :"create!"
         
         ##
         # Rotates the file.
@@ -45,7 +77,7 @@ module RotateAlternative
         #
         
         def archive!
-            Storage::get(@directory).put(self)
+            Storage::put(self)
         end
         
         ##
@@ -53,7 +85,7 @@ module RotateAlternative
         #
         
         def archivable?
-            return self.too_big? or self.too_old?
+            self.too_big? or self.too_old?
         end
         
         ##
@@ -69,7 +101,10 @@ module RotateAlternative
         #
         
         def too_old?
-            Time::at(self.state.files[@path.to_sym] + @directory.configuration[:"period"].to_seconds) < Time::now
+            period = @directory.configuration[:period].to_seconds
+            multiplier =  @directory.configuration[:rotate]
+            
+            return Time::at(self.state.date + (period * multiplier)) < Time::now
         end
         
         ##
@@ -77,7 +112,11 @@ module RotateAlternative
         #
         
         def state
-            State::get
+            if @state.nil?
+                @state = State::get.file(@path)
+            end
+            
+            return @state
         end
         
     end

@@ -19,16 +19,24 @@ module RotateAlternative
         @configuration
         
         ##
+        # Parent configuration object.
+        #
+        
+        @parent
+        
+        ##
         # Holds directory identifier.
         #
         
         @identifier
+        attr_reader :identifier
         
         ##
         # Holds directory path.
         #
         
         @path
+        attr_reader :path
         
         ##
         # Constructor.
@@ -37,7 +45,8 @@ module RotateAlternative
         # string, so directory path.
         #
         
-        def initialize(identifier)
+        def initialize(identifier, parent = nil)
+            @parent = parent
             if identifier.kind_of? Symbol
                 @identifier = identifier
             else
@@ -58,6 +67,8 @@ module RotateAlternative
                     
                     if not directory.nil?
                         @identifier = directory.identifier
+                    elsif not @parent.nil?
+                        @identifier = @parent.identifier
                     else
                         @identifier = :default
                     end
@@ -114,6 +125,15 @@ module RotateAlternative
                 file.rotate!
             end
         end        
+        
+        ##
+        # Indicates, directory entries should be compressed 
+        # in archive.
+        #
+        
+        def compressable?
+            not self.configuration[:compress].nil?
+        end
         
     end
     

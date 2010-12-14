@@ -74,14 +74,14 @@ dirs:
         ##
         # Says which command use for compressing the log. It must 
         # support the same base syntax and '<command> <file>' order
-        # as gzip and bzip2. You can specify it both as path or simply 
-        # shell command.
+        # as gzip and bzip2. You can specify it both as path with 
+        # parameters or simply shell command.
         #
         # Default value:
         #   nothing
         #
         
-        compress: gzip
+        compress: gzip --best
         
         ##
         # Says logs from which period it will keep accroding to 'type' 
@@ -153,6 +153,7 @@ dirs:
         # Possible values:
         #   - move
         #   - create
+        #   - remove
         #   - truncate
         #   - copy
         #   - hook:<hook name>
@@ -161,4 +162,4 @@ dirs:
         #   move + create
         #
         
-        action: move + create 
+        action: move + create
