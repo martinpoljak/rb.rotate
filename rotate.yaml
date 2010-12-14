@@ -1,7 +1,18 @@
 # YAML
 
+paths:
+
+    ##
+    # Location of the state file (database about log rotation).
+    #
+    # Default value:
+    #   /var/lib/rotate-alternative.status
+    #
+    
+    state file: ./rotate-alternative.status
+
 hooks:
-    something: /path/to/some/script %filepath
+    #something: /path/to/some/script %filepath
 
 dirs:
  
@@ -85,12 +96,15 @@ dirs:
         
         # default: (nothing)
         # possible: 
+        #   - yearly
         #   - monthly 
         #   - weekly
         #   - daily 
         #   - hourly
+        #
+        # or 1 month etc.
         
-        type: weekly
+        period: weekly
         
         ##
         # Guards maximal size of the log. Log is bigger than this value,

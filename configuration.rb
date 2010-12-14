@@ -199,3 +199,87 @@ module RotateAlternative
     end
     
 end
+
+# String extensions
+
+class String
+
+    TO_TIME_MATCHER = /(\d+)\s*((?:year|month|week|day|hour|minute|second))s?/i
+
+    ##
+    # Converts number with units to bytes count.
+    #
+    
+    def to_bytes
+        value = self.to_i
+        if value == 0
+            raise Exception::new("Invalid size specification: " << self << ".")
+        end
+        
+        exponent = nil
+        case self[-1]
+            when ?M
+                exponent = 2
+            when ?G
+                exponent = 3
+            when ?K
+                exponent = 1
+            when ?0, ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9
+                exponent = 0
+            else
+                raise Exception::new("Invalid unit in size specification: " << self << ".")
+        end
+        
+        return value * (1024 ** exponent)
+    end
+    
+    ##
+    # Converts string identifier of time period to seconds.
+    #
+    
+    def to_seconds
+    
+        period = nil
+        case self.to_sym
+            when :yearly
+                period = "1 year"
+            when :monthly
+                period = "1 month"
+            when :weekly
+                period = "1 week"
+            when :daily
+                period = "1 day"
+            when :hourly
+                period = "1 hour"
+            else
+                period = self
+        end
+        
+        matches = period.match(self.class::TO_TIME_MATCHER)
+        if matches.nil?
+            raise Exception::new("Invalid period specification: " << self << ".")
+        end
+        
+        count = matches[1].to_i
+        unit = matches[2].to_sym
+        seconds = nil
+        
+        case unit
+            when :year
+                seconds = 365 * 24 * 60 * 60
+            when :month
+                seconds = 30 * 24 * 60 * 60
+            when :week
+                seconds = 7 * 24 * 60 * 60
+            when :day
+                seconds = 24 * 60 * 60
+            when :hour
+                seconds = 60 * 60
+            when :second
+                seconds = 1
+        end
+        
+        return seconds * count
+    end
+        
+end

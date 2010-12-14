@@ -97,7 +97,7 @@ module RotateAlternative
         #
         
         def each_directory(&block)
-            Reader::new(self.path, :filter => :dirs, &block)
+            Reader::read(self, :filter => :dirs, &block)
         end
         
         ##
@@ -105,8 +105,10 @@ module RotateAlternative
         #
         
         def rotate!
-            self.each_directory do |directory|
-                directory.rotate!
+            if self.configuration[:recursive]
+                self.each_directory do |directory|
+                    directory.rotate!
+                end
             end
             self.each_file do |file|
                 file.rotate!

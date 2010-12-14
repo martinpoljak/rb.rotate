@@ -1,4 +1,5 @@
 # encoding: utf-8
+require "state"
 
 module RotateAlternative
 
@@ -43,15 +44,23 @@ module RotateAlternative
                 dir.each_entry do |item|
                     filepath = dirpath.dup << "/" << item
                     
-                    if (not Directory.configuration[:follow]) and (File.symlink? filepath)
+                    if (not @directory.configuration[:follow]) and (File.symlink? filepath)
                         next
                     elsif (filter.nil? or (filter == :files)) and (File.file? filepath)
                         emit_file filepath, &block
-                    elsif (filter.nil? or (filter == :dirs)) and (item == ".") and (item.to_sym != :"..") and (File.directory? filepath)
+                    elsif (filter.nil? or (filter == :dirs)) and (item == ?.) and (item.to_sym != :"..") and (File.directory? filepath)
                         emit_directory filepath, &block
                     end
                 end
             end
+        end
+        
+        ##
+        # Returns the state file object.
+        #
+        
+        def state
+            State::get
         end
         
         
@@ -63,7 +72,9 @@ module RotateAlternative
         #
         
         def emit_file(filepath)
-            yield File::new(@directory, filepath)
+            if not self.state.archive.has_file? filepath
+                yield File::new(@directory, filepath)
+            end
         end
         
         ##
@@ -71,10 +82,13 @@ module RotateAlternative
         #
         
         def emit_directory(filepath)
-            yield Directory::new(filepath)
+            if not self.state.archive.has_directory? filepath
+                yield Directory::new(filepath)
+            end
         end
         
     end
     
 end
+
 
