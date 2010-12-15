@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require "fileutils"
-require "storage"
+require "lib/storage"
 
 module RotateAlternative
 

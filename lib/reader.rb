@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "state"
+require "lib/state"
 
 module RotateAlternative
 

@@ -2,7 +2,7 @@
 
 require "yaml"
 require "fileutils"
-require "state"
+require "lib/state"
 
 module RotateAlternative
 
@@ -27,7 +27,13 @@ module RotateAlternative
             @directory = directory
         end
         
-        alias :get :new
+        ##
+        # Alias for new.
+        #
+        
+        def self.get
+            self::new
+        end
         
         ##
         # Creates storage according to file and puts it to it.

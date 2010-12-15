@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-require "configuration"
-require "file"
-require "reader"
+require "lib/configuration"
+require "lib/file"
+require "lib/reader"
 
 module RotateAlternative
 

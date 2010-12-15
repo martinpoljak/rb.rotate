@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require "yaml"
-require "directory"
+require "lib/directory"
 
 module RotateAlternative
 
@@ -142,7 +142,7 @@ module RotateAlternative
         # 
         
         def read(file)
-            data = YAML.load(File.read(file))
+            data = YAML.load(::File.read(file))
             @data = { }
             
             # Converts strings to symbols
