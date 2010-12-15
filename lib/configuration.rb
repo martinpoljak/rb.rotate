@@ -138,6 +138,14 @@ module RotateAlternative
         end
         
         ##
+        # Alias for #find_path.
+        #
+        
+        def self.find_path(path)
+            self::get.find_path(path)
+        end
+        
+        ##
         # Opens the file.
         # 
         
@@ -150,8 +158,10 @@ module RotateAlternative
                 section_data = { }
                 @data[name.to_sym]= section_data
                 
-                section.each_pair do |key, value|
-                    section_data[key.to_sym] = value
+                if section.kind_of? Hash
+                    section.each_pair do |key, value|
+                        section_data[key.to_sym] = value
+                    end
                 end
             end
         end
@@ -177,7 +187,7 @@ module RotateAlternative
         #
         
         def each_directory
-            @data.each_pair do |name, dir|
+            @data[:dirs].each_pair do |name, dir|
                 yield Directory::new(name, dir)
             end
         end

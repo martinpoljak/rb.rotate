@@ -47,7 +47,7 @@ module RotateAlternative
         
         def self.get
             if @@self.nil?
-                @@self = self.class::new
+                @@self = self::new
             end
             
             return @@self
@@ -67,10 +67,10 @@ module RotateAlternative
         
         def data
             if @data.nil?
-                if not File.exists? @path
+                if not ::File.exists? @path
                     self.create!
                 else
-                    @data = YAML.load(File.read(@path))
+                    @data = YAML.load(::File.read(@path))
                 end
             end
             
@@ -106,7 +106,7 @@ module RotateAlternative
         #
         
         def save!
-            File.open(@path, "w") do |io|
+            ::File.open(@path, "w") do |io|
                 io.write(@data.to_yaml)
             end
         end
@@ -117,7 +117,7 @@ module RotateAlternative
         
         def archive
             if @archive.nil?
-                @archive = StateModule::Archive::new(@data[:archive])
+                @archive = StateModule::Archive::new(self.data[:archive])
             end
             
             return @archive
@@ -136,7 +136,14 @@ module RotateAlternative
         #
         
         def file(path)
-            StateModule::File::new(self.files[path.to_sym])
+            data = self.files[path.to_sym]
+            
+            if data.nil?
+                data = { }
+                self.files[path.to_sym] = data
+            end
+            
+            StateModule::File::new(data)
         end
         
         ##
@@ -268,6 +275,14 @@ module RotateAlternative
             
             def initialize(data)
                 @data = data
+            end
+            
+            ##
+            # Indicates tate record for file exists.
+            #
+            
+            def exists?
+                not @data.empty?
             end
             
             ##

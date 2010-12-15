@@ -35,7 +35,7 @@ module RotateAlternative
         # Constructor.
         #
         
-        def new(directory, path)
+        def initialize(directory, path)
             @directory = directory
             @path = path
         end
@@ -53,7 +53,7 @@ module RotateAlternative
         #
         
         def create!
-            File.open(@path, "w")
+            ::File.open(@path, "w")
         end
         
         ##
@@ -93,7 +93,7 @@ module RotateAlternative
         #
         
         def too_big?
-            (File.size? @path) > @directory.configuration[:"max size"].to_bytes 
+            (::File.size? @path) > @directory.configuration[:"max size"].to_bytes 
         end
         
         ##
@@ -101,10 +101,15 @@ module RotateAlternative
         #
         
         def too_old?
-            period = @directory.configuration[:period].to_seconds
-            multiplier =  @directory.configuration[:rotate]
+            if self.state.exists?
+                period = @directory.configuration[:period].to_seconds
+                multiplier =  @directory.configuration[:rotate]
+                result = Time::at(self.state.date + (period * multiplier)) < Time::now
+            else
+                result = false
+            end
             
-            return Time::at(self.state.date + (period * multiplier)) < Time::now
+            return result
         end
         
         ##

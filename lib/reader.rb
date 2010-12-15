@@ -28,7 +28,7 @@ module RotateAlternative
         # Constructor.
         #
         
-        def new(directory)
+        def initialize(directory)
             @directory = directory
         end
         
@@ -44,11 +44,11 @@ module RotateAlternative
                 dir.each_entry do |item|
                     filepath = dirpath.dup << "/" << item
                     
-                    if (not @directory.configuration[:follow]) and (File.symlink? filepath)
+                    if (not @directory.configuration[:follow]) and (::File.symlink? filepath)
                         next
-                    elsif (filter.nil? or (filter == :files)) and (File.file? filepath)
+                    elsif (filter.nil? or (filter == :files)) and (::File.file? filepath)
                         emit_file filepath, &block
-                    elsif (filter.nil? or (filter == :dirs)) and (item == ?.) and (item.to_sym != :"..") and (File.directory? filepath)
+                    elsif (filter.nil? or (filter == :dirs)) and (item != ?.) and (item.to_sym != :"..") and (::File.directory? filepath)
                         emit_directory filepath, &block
                     end
                 end
