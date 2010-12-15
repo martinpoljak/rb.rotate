@@ -3,6 +3,7 @@
 require "lib/configuration"
 require "lib/file"
 require "lib/reader"
+require "lib/storage"
 
 module RotateAlternative
 
@@ -116,6 +117,10 @@ module RotateAlternative
         #
         
         def rotate!
+            # Cleans old or expired items
+            self.storage.clean!
+            
+            # Rotates
             if self.configuration[:recursive]
                 self.each_directory do |directory|
                     directory.rotate!
@@ -133,6 +138,14 @@ module RotateAlternative
         
         def compressable?
             not self.configuration[:compress].nil?
+        end
+        
+        ##
+        # Returns storage appropriate to directory.
+        #
+        
+        def storage
+            Storage::get(self)
         end
         
     end

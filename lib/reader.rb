@@ -73,7 +73,7 @@ module RotateAlternative
         
         def emit_file(filepath)
             if not self.state.archive.has_file? filepath
-                yield File::new(@directory, filepath)
+                yield File::new(filepath, @directory)
             end
         end
         

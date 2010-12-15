@@ -27,6 +27,7 @@ module RotateAlternative
             # Saves state file
             State::save!
         end
+        
     end    
     
 end

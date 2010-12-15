@@ -70,6 +70,22 @@ module RotateAlternative
         end
         
         ##
+        # Alias for #files.
+        #
+        
+        def self.files
+            self::get.files
+        end
+        
+        ##
+        # Alias for #each_file.
+        #
+        
+        def self.each_file(&block)
+            self::get.each_file(&block)
+        end
+        
+        ##
         # Returns data array.
         #
         
@@ -162,6 +178,17 @@ module RotateAlternative
             Configuration::get
         end
         
+        ##
+        # Traverses through all files and emits path and 
+        # StateModule::File objects.
+        #
+        
+        def each_file
+            self.files.each_pair do |path, data|
+                yield path, StateModule::File::new(data)
+            end
+        end
+        
     end
     
 end
@@ -195,7 +222,15 @@ module RotateAlternative
             #
             
             def file(path)
-                @data[:files][path.to_sym]
+                self.files[path.to_sym]
+            end
+            
+            ##
+            # Returns files data.
+            #
+            
+            def files
+                @data[:files]
             end
             
             ##
@@ -326,6 +361,14 @@ module RotateAlternative
             end
             
             ##
+            # Returns directory specification.
+            #
+            
+            def directory
+                @data[:directory].to_sym
+            end
+            
+            ##
             # Sets items list.
             #
             
@@ -349,8 +392,9 @@ module RotateAlternative
                 new = {
                     :date => Time::now,
                     :items => { },
+                    :directory => file.directory.identifier
                     :filename => {
-                        :name => ::File.basename(file.path[cut], extension.to_s),
+                        :name => ::File.basename(file.path, extension.to_s)[cut],
                         :extension => extension
                     }
                 }

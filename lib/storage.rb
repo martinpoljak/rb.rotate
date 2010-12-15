@@ -85,7 +85,26 @@ module RotateAlternative
                         # TODO: hooks
                 end
             end
-            
+        end
+        
+        ##
+        # Traverses through all items in global storage.
+        #
+        
+        def self.each_item(&block)
+            self.each_entry do |entry|
+                entry.each_item(&block)
+            end
+        end
+        
+        ##
+        # Traverses through all directories in storage.
+        #
+        
+        def self.each_directory
+            Configuration::each_directory do |directory|
+                yield self::get(directory)
+            end
         end
         
     end
@@ -130,13 +149,18 @@ module RotateAlternative
             def put!(method)
             
                 # If necessary, creates the state record
-                self.file.state.create(@file)
+                if not self.file.state.exists?
+                    self.file.state.create(@file)
+                end
             
                 # Rotates other items
                 new_list = { }
                 self.file.state.items.each_pair do |identifier, path|
                     item = Item::new(self, identifier, path).rotate!
-                    new_list[item.identifier] = item.path
+                    
+                    if item.exists?
+                        new_list[item.identifier] = item.path
+                    end
                 end
                 
                 # Puts new item
@@ -200,19 +224,31 @@ module RotateAlternative
             #
 
             def rotate!
-                state = @entry.file.state
-                
                 ##
                 # Unregisters old filename, increases counter
                 # and register it again.
                 #
                 
                 self.unregister!
-                @identifier += 1
-                self.rebuild_path!
-                self.register!
+                
+                if self.exists?
+                    old_path = self.path
+                    @identifier += 1
+                    self.rebuild_path!
+                    FileUtils.move(old_path, self.path)
+                    
+                    self.register!
+                end
                 
                 return self
+            end
+            
+            ##
+            # Indicates, item still exists in storage.
+            #
+            
+            def exists?
+                ::File.exists? self.path
             end
             
             ##

@@ -2,6 +2,8 @@
 
 require "fileutils"
 require "lib/storage"
+require "lib/directory"
+require "lib/configuration"
 
 module RotateAlternative
 
@@ -16,7 +18,6 @@ module RotateAlternative
         #
         
         @directory
-        attr_reader :directory
         
         ##
         # Indicates file path.
@@ -35,9 +36,29 @@ module RotateAlternative
         # Constructor.
         #
         
-        def initialize(directory, path)
+        def initialize(path, directory = nil)
             @directory = directory
             @path = path
+        end
+        
+        ##
+        # Returns the file parent directory object.
+        #
+        
+        def directory
+            if @directory.nil?
+                if not self.state.directory.nil?
+                    @directory = Directory::new(self.state.directory)
+                else
+                    @directory = Configuration::find_path(Fire.dirname(@path))
+                end
+                    
+                if @directory.nil?
+                    raise Exception::new("File from directory which isn't convered by rotate-alternative found: " << @path << ".")
+                end
+            end
+            
+            return @directory
         end
         
         ##
@@ -103,8 +124,7 @@ module RotateAlternative
         def too_old?
             if self.state.exists?
                 period = @directory.configuration[:period].to_seconds
-                multiplier =  @directory.configuration[:rotate]
-                result = Time::at(self.state.date + (period * multiplier)) < Time::now
+                result = Time::at(self.state.date + period) < Time::now
             else
                 result = false
             end

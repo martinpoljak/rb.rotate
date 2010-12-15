@@ -162,4 +162,5 @@ dirs:
         #   move + create
         #
         
-        action: move + create
+        #action: move + create
+        action: copy
