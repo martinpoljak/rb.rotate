@@ -93,7 +93,7 @@ module RotateAlternative
         #
         
         def too_big?
-            (::File.size? @path) > @directory.configuration[:"max size"].to_bytes 
+            ::File.size(@path) > @directory.configuration[:"max size"].to_bytes 
         end
         
         ##

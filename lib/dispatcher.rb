@@ -1,5 +1,7 @@
 # encoding: utf-8
+
 require "lib/configuration"
+require "lib/state"
 
 module RotateAlternative
 
@@ -21,6 +23,9 @@ module RotateAlternative
             Configuration::each_directory do |directory|
                 directory.rotate!
             end
+            
+            # Saves state file
+            State::save!
         end
     end    
     

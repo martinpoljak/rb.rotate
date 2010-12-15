@@ -31,8 +31,8 @@ module RotateAlternative
         # Alias for new.
         #
         
-        def self.get
-            self::new
+        def self.get(directory)
+            self::new(directory)
         end
         
         ##
@@ -40,7 +40,7 @@ module RotateAlternative
         #
         
         def self.put(file)
-            self.class::get(file.directory).put(file)
+            self::get(file.directory).put(file)
         end
         
         ##
@@ -129,17 +129,21 @@ module RotateAlternative
             
             def put!(method)
             
+                # If necessary, creates the state record
+                self.file.state.create(@file)
+            
                 # Rotates other items
                 new_list = { }
                 self.file.state.items.each_pair do |identifier, path|
-                    identifier, path = Item::new(self, identifier, path).rotate!
-                    new_list[identifier] = path
+                    item = Item::new(self, identifier, path).rotate!
+                    new_list[item.identifier] = item.path
                 end
                 
                 # Puts new item
                 item = Item::new(self).allocate(method)
+                new_list[item.identifier] = item.path
                 
-                self.file.state.items = new
+                self.file.state.items = new_list
             end
             
         end
@@ -208,7 +212,7 @@ module RotateAlternative
                 self.rebuild_path!
                 self.register!
                 
-                return @identifier, @path
+                return self
             end
             
             ##
@@ -216,7 +220,7 @@ module RotateAlternative
             #
             
             def register!
-                archive.register_file(self.path, @date)
+                State::archive.register_file(self.path, @date)
             end
             
             ##
@@ -224,7 +228,7 @@ module RotateAlternative
             #
             
             def unregister!
-                archive.unregister_file(self.path)
+                State::archive.unregister_file(self.path)
             end
             
             ##
@@ -245,7 +249,11 @@ module RotateAlternative
             
             def rebuild_path!
                 state = @entry.file.state
-                @path = @entry.storage.directory.path.dup << "/" << state.name << "." << @identifier.to_s << "." << state.extension
+                @path = @entry.storage.directory.path.dup << "/" << state.name << "." << @identifier.to_s
+                
+                if not state.extension.nil?
+                    @path << "." << state.extension
+                end
             end
             
             ##
@@ -267,6 +275,7 @@ module RotateAlternative
                 end
                 
                 self.register!
+                return self
             end
             
             ##

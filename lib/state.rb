@@ -62,6 +62,14 @@ module RotateAlternative
         end
         
         ##
+        # Alias for #archive.
+        #
+        
+        def self.archive
+            self::get.archive
+        end
+        
+        ##
         # Returns data array.
         #
         
@@ -323,6 +331,31 @@ module RotateAlternative
             
             def items=(value)
                 @data[:items].replace(value)
+            end
+            
+            ##
+            # Creates the state record.
+            #
+            
+            def create(file)
+                extension = ::File.extname(file.path)[1..-1]
+                if extension.nil?
+                    extension = nil
+                    cut = 0..-1
+                else
+                    cut = 0..-2
+                end
+                
+                new = {
+                    :date => Time::now,
+                    :items => { },
+                    :filename => {
+                        :name => ::File.basename(file.path[cut], extension.to_s),
+                        :extension => extension
+                    }
+                }
+                
+                @data.replace(new)
             end
             
         end

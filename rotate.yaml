@@ -81,7 +81,7 @@ dirs:
         #   nothing
         #
         
-        compress: gzip --best
+        #compress: gzip --best
         
         ##
         # Says logs from which period it will keep accroding to 'type' 
@@ -121,7 +121,7 @@ dirs:
         #   nothing
         #
         
-        max size: 20M
+        max size: 2K
         
         ##
         # Says by which actions archive. Some daemons keep logs open, so 
