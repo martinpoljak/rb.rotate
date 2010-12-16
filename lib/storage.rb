@@ -367,7 +367,7 @@ module RotateAlternative
             
             def rebuild_path!
                 state = @entry.file.state
-                @path = @entry.storage.directory.path.dup << "/" << state.name << "." << @identifier.to_s
+                @path = @entry.storage.directory.configuration[:storage].dup << "/" << state.name << "." << @identifier.to_s
                 
                 if not state.extension.nil?
                     @path << "." << state.extension
