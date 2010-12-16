@@ -88,12 +88,61 @@ module RotateAlternative
         end
         
         ##
+        # Cleanups expired items from the storage.
+        #
+        
+        def cleanup!
+            self.each_entry do |entry|
+                entry.cleanup!
+            end
+        end
+                
+        ##
+        # Traverses through each item in current storage.
+        #
+        
+        def each_item(&block)
+            self.each_entry do |entry|
+                entry.each_item(&block)
+            end
+        end
+                
+        ##
+        # Traverses through all entries of this directory storage.
+        #
+        
+        def each_entry
+            State::each_file do |path, state|
+                if state.directory == self.directory.identifier
+                    file = File::new(path)
+                    entry = StorageModule::Entry::new(self, file)
+                    
+                    yield entry
+                end
+            end
+        end
+        
+        ##
         # Traverses through all items in global storage.
         #
         
         def self.each_item(&block)
             self.each_entry do |entry|
                 entry.each_item(&block)
+            end
+        end
+        
+        ##
+        # Traverses through all entries.
+        #
+        
+        def self.each_entry
+            State::each_file do |path, state|
+                file = File::new(path)
+                storage = self::new(file.directory)
+                entry = Entry::new(storage, file)
+                
+                yield entry
             end
         end
         
@@ -155,11 +204,12 @@ module RotateAlternative
             
                 # Rotates other items
                 new_list = { }
-                self.file.state.items.each_pair do |identifier, path|
-                    item = Item::new(self, identifier, path).rotate!
-                    
+                self.each_item do |item|
                     if item.exists?
+                        item.rotate!
                         new_list[item.identifier] = item.path
+                    else
+                        item.unregister!
                     end
                 end
                 
@@ -167,7 +217,30 @@ module RotateAlternative
                 item = Item::new(self).allocate(method)
                 new_list[item.identifier] = item.path
                 
+                self.file.state.touch!
                 self.file.state.items = new_list
+            end
+            
+            ##
+            # Cleanups the items.
+            #
+            
+            def cleanup!
+                self.each_item do |item|
+                    if item.expired?
+                        item.remove!
+                    end
+                end
+            end
+            
+            ##
+            # Traverses through all items.
+            #
+            
+            def each_item
+                self.file.state.items.each_pair do |identifier, path|
+                    yield Item::new(self, identifier, path)
+                end
             end
             
         end
@@ -268,6 +341,15 @@ module RotateAlternative
             end
             
             ##
+            # Removes itself.
+            #
+            
+            def remove!
+                self.unregister!
+                FileUtils.remove(self.path)
+            end
+            
+            ##
             # Returns path.
             #
             
@@ -320,6 +402,34 @@ module RotateAlternative
             
             def compress!
                 system(@entry.storage.directory.configuration[:compress].dup << " " << self.path)
+            end
+            
+            ##
+            # Returns the creation date.
+            #
+            
+            def created_at
+                @date
+            end
+            
+            ##
+            # Returns the expiration date.
+            #
+            
+            def expiration_at
+                configuration = @entry.storage.directory.configuration
+                period = configuration[:period].to_seconds
+                multiplier = configuration[:rotate]
+                
+                return self.created_at + (period * multiplier)
+            end
+            
+            ##
+            # Indicates, item is expired.
+            #
+            
+            def expired?
+                self.expiration_at < Time::now
             end
             
         end

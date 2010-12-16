@@ -50,7 +50,7 @@ module RotateAlternative
                 if not self.state.directory.nil?
                     @directory = Directory::new(self.state.directory)
                 else
-                    @directory = Configuration::find_path(Fire.dirname(@path))
+                    @directory = Configuration::find_path(File.dirname(@path))
                 end
                     
                 if @directory.nil?

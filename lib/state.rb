@@ -131,7 +131,7 @@ module RotateAlternative
         
         def save!
             ::File.open(@path, "w") do |io|
-                io.write(@data.to_yaml)
+                io.write(self.data.to_yaml)
             end
         end
         
@@ -152,7 +152,7 @@ module RotateAlternative
         #
         
         def files
-            @data[:files]
+            self.data[:files]
         end
         
         ##
@@ -337,6 +337,14 @@ module RotateAlternative
             end
             
             ##
+            # Touches date to current date.
+            #
+            
+            def touch!
+                @data[:date] = Time::now
+            end
+            
+            ##
             # Returns extension.
             #
             
@@ -392,7 +400,7 @@ module RotateAlternative
                 new = {
                     :date => Time::now,
                     :items => { },
-                    :directory => file.directory.identifier
+                    :directory => file.directory.identifier,
                     :filename => {
                         :name => ::File.basename(file.path, extension.to_s)[cut],
                         :extension => extension
