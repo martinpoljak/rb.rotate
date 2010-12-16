@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-require "yaml"
 require "fileutils"
 require "lib/state"
 
@@ -96,6 +95,31 @@ module RotateAlternative
                 entry.cleanup!
             end
         end
+        
+        ##
+        # Removes orphans.
+        #
+        
+        def self.remove_orphans!
+            self::each_entry do |entry|
+                items_count = 0
+                
+                entry.each_item do |item|
+                    if item.expired?
+                        item.remove!
+                    elsif not item.exists?
+                        item.unregister!
+                    else
+                        items_count += 1
+                    end
+                end
+                
+                file = entry.file
+                if (not file.exists?) and (items_count <= 0)
+                    file.state.destroy!
+                end                    
+            end
+        end
                 
         ##
         # Traverses through each item in current storage.
@@ -140,7 +164,7 @@ module RotateAlternative
             State::each_file do |path, state|
                 file = File::new(path)
                 storage = self::new(file.directory)
-                entry = Entry::new(storage, file)
+                entry = StorageModule::Entry::new(storage, file)
                 
                 yield entry
             end

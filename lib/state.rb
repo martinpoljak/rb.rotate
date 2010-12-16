@@ -167,7 +167,7 @@ module RotateAlternative
                 self.files[path.to_sym] = data
             end
             
-            StateModule::File::new(data)
+            StateModule::File::new(path, data)
         end
         
         ##
@@ -185,7 +185,7 @@ module RotateAlternative
         
         def each_file
             self.files.each_pair do |path, data|
-                yield path, StateModule::File::new(data)
+                yield path, StateModule::File::new(path, data)
             end
         end
         
@@ -313,10 +313,17 @@ module RotateAlternative
             @data
             
             ##
+            # Holds path of the appropriate file.
+            #
+            
+            @path
+            
+            ##
             # Constructor.
             #
             
-            def initialize(data)
+            def initialize(path, data)
+                @path = path
                 @data = data
             end
             
@@ -408,6 +415,15 @@ module RotateAlternative
                 }
                 
                 @data.replace(new)
+            end
+            
+            ##
+            # Destroys the state record.
+            #
+            
+            def destroy!
+                State::files.delete(@path.to_sym)
+                @data = nil
             end
             
         end

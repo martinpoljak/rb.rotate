@@ -144,6 +144,14 @@ module RotateAlternative
             return @state
         end
         
+        ##
+        # Indicates file exists.
+        #
+        
+        def exists?
+            ::File.exists? @path.to_s
+        end
+        
     end
     
 end

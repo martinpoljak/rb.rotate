@@ -118,7 +118,7 @@ module RotateAlternative
         
         def rotate!
             # Cleans old or expired items
-            self.storage.cleanup!
+            # self.storage.cleanup! (cleaned up globally by dispatcher call)
             
             # Rotates
             if self.configuration[:recursive]

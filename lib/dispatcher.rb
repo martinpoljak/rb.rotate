@@ -24,6 +24,9 @@ module RotateAlternative
                 directory.rotate!
             end
             
+            # Removes orhpans
+            Storage::remove_orphans!
+            
             # Saves state file
             State::save!
         end
