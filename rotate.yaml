@@ -133,25 +133,52 @@ dirs:
         
         rotate: 5
         
-        # default: (nothing)
-        # possible: 
+        ##
+        # Says how old should be log for archiving and in combination
+        # with 'rotate' option how old should be logs in archive 
+        # maximally. (Simply period * rotate.)
+        #
+        # In contrast to classical logrotate, you can enter wide range
+        # of values. Firstly 'yearly', 'monthly' etc. where are their
+        # sense probably clear and secondly in format:
+        #   <number> <period>
+        #
+        # So for example '2 weeks' or '5 days'. The smallest interval
+        # in this format is second, so you can define for example little 
+        # obscure setting '2 seconds' or so.
+        #
+        # Be warn, if you will really use seconds with combination of
+        # date identifier of the archived files, default identifier 
+        # format includes minutes only, so without changing it there is 
+        # danger of rewritting the archived files.
+        #
+        # Default value:
+        #   weekly
+        #
+        # Possible values:
         #   - yearly
         #   - monthly 
         #   - weekly
         #   - daily 
         #   - hourly
+        #   - <number> years
+        #   - <number> months
+        #   - <number> weeks
+        #   - <number> days
+        #   - <number> hours
+        #   - <number> minutes
+        #   - <number> seconds
         #
-        # or 1 month etc.
         
         period: weekly
         
         ##
         # Guards maximal size of the log. Log is bigger than this value,
-        # rotates it. But it keeps other archived logs lifetime, so although 
-        # log has been rotated prematurely and number of logs in archive is
-        # bigger then 'rotate' settings, it will keep all because 'rotate'
-        # settings means only number of 'type' units for keeping the log,
-        # nothing more.
+        # rotates it. But it keeps other archived logs lifetime, so 
+        # although log has been rotated prematurely and number of logs 
+        # in archive is bigger then 'rotate' settings, it will keep all 
+        # because 'rotate' settings means only number of 'type' units 
+        # for keeping the log, nothing more.
         #
         # You can use base units here: 'K', 'M' and 'G' which mean 
         # appropriate quantity of kilobytes, megabytes and gigabytes.
