@@ -92,7 +92,7 @@ module RotateAlternative
                 Pony.mail(
                     :from => Etc.getlogin.dup << "@" << Socket.gethostname,
                     :to => to,
-                    :subject => "Recycled Log: " << self.file.path,
+                    :subject => "Log: " << self.file.path,
                     :body => ::File.read(self.file.path)
                 )
             end

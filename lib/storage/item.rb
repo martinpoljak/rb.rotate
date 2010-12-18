@@ -150,6 +150,17 @@ module RotateAlternative
             #
             
             def mail!
+                to = @entry.storage.directory.configuration[:mail]
+                self.decompress!
+                
+                Pony.mail(
+                    :from => Etc.getlogin.dup << "@" << Socket.gethostname,
+                    :to => to,
+                    :subject => "Log: " << self.path,
+                    :body => ::File.read(self.target_path)
+                )
+                
+                self.compress!
             end
             
             ##

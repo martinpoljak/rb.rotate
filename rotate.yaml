@@ -277,4 +277,4 @@ dirs:
         #
         
         #action: move + create
-        action: append
+        action: mail:root@localhost + move + create
