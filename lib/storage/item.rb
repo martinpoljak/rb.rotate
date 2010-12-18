@@ -189,6 +189,16 @@ module RotateAlternative
             end
             
             ##
+            # Generates target (without compression extension) path 
+            # from path.
+            #
+            
+            def target_path
+                extension = self.compression[1]
+                self.path[0...-(extension.length + 1)]
+            end
+            
+            ##
             # Rebuilds path.
             #
             
@@ -261,10 +271,9 @@ module RotateAlternative
             
             def compress!
                 if self.compressed?
-                    command, extension = self.compression
-                    target = self.path[0...-(extension.length + 1)]
-                    FileUtils.move(self.path, target)
-                    system(command.dup << " " << target)
+                    command = self.compression[0]
+                    FileUtils.move(self.path, self.target_path)
+                    system(command.dup << " " << self.target_path)
                 end
             end
             
@@ -274,10 +283,9 @@ module RotateAlternative
             
             def decompress!
                 if self.compressed? and self.exists?
-                    command, extension = self.compression
+                    command = self.compression[0]
                     system(command.dup << " " << self.path << " 2> /dev/null")
-                    target = self.path[0...-(extension.length + 1)]
-                    FileUtils.move(target, self.path)
+                    FileUtils.move(self.target_path, self.path)
                 end
             end
             
