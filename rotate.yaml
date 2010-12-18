@@ -41,15 +41,15 @@ dirs:
         # be respected.
         #
         # Possible values:
-        #   - true
-        #   - false
+        #   - yes
+        #   - no
         #   - flat
         #
         # Default value:
-        #   true
+        #   yes
         #
         
-        recursive: true
+        recursive: yes
         
         ##
         # Says, it should follow symbolic links by transparent way. In 
@@ -75,13 +75,34 @@ dirs:
         # Says which command use for compressing the log. It must 
         # support the same base syntax and '<command> <file>' order
         # as gzip and bzip2. You can specify it both as path with 
-        # parameters or simply shell command.
+        # parameters or simply shell command. Uses gzip --best as 
+        # default.
         #
         # Default value:
-        #   nothing
+        #   no
+        #
+        # Possible values:
+        #   <command>
+        #   yes
+        #   no
         #
         
-        #compress: gzip --best
+        compress: yes
+        
+        ##
+        # Says which command use for decompression. It expects the same 
+        # base syntax as gunzip or bunzip2. Uses gunzip as default.
+        #
+        # Default value:
+        #   no
+        #
+        # Possible values:
+        #   <command>
+        #   yes
+        #   no        
+        #
+        
+        decompress: yes
         
         ##
         # Says logs from which period it will keep accroding to 'type' 
@@ -179,7 +200,11 @@ dirs:
         # One additional option is 'append' which orders appending the 
         # log to existing file. It has sense, of sure, only if the 
         # 'identifier' option is set by appropriate way, so filename in
-        # archive storage is static.
+        # archive storage is static. Be warn, if you use compression, 
+        # file will be recompressed in the whole if this action applied.
+        #
+        # 'Mail' action will mail log to specified address. If its
+        # argument is omitted, it will use argument from 'mail' setting.
         #
         # Be warn, this option works by "programmable" way. Tokens are 
         # evaluated in the order and without thinking about the right sense.
@@ -210,6 +235,7 @@ dirs:
         #   - create
         #   - remove
         #   - truncate
+        #   - mail:<e-mail>
         #   - hook:<hook name>
         #
         # Default value:

@@ -451,9 +451,7 @@ module RotateAlternative
                     when :move
                         FileUtils.move(@entry.file.path, self.path)
                     when :append
-                        ::File.open(self.path, "a") do |io|
-                            io.write(::File.read(@entry.file.path))
-                        end
+                        self.append!
                     else
                         raise Exception::new("Invalid allocating method.")
                 end
@@ -467,11 +465,47 @@ module RotateAlternative
             end
             
             ##
-            # Compress the file if necessary.
+            # Appends to item.
+            #
+            
+            def append!
+                if @entry.file.state.compressed?
+                    self.decompress!
+                end
+                
+                ::File.open(self.path, "a") do |io|
+                    io.write(::File.read(@entry.file.path))
+                end                
+            end
+            
+            ##
+            # Compress the file.
             #
             
             def compress!
-                system(@entry.storage.directory.configuration[:compress].dup << " " << self.path)
+                command = @entry.storage.directory.configuration[:compress]
+                if command === true
+                    command = "gzip --best"
+                else
+                    command = command.dup
+                end
+                
+                system(command << " " << self.path)
+            end
+            
+            ##
+            # Decompress file.
+            #
+            
+            def decompress!
+                command = @entry.storage.directory.configuration[:decompress]
+                if command === true
+                    command = "gunzip"
+                else
+                    command = command.dup
+                end
+               
+                system(command << " " << self.path << " 2> /dev/null")
             end
             
             ##
