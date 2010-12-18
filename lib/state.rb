@@ -130,6 +130,7 @@ module RotateAlternative
         #
         
         def save!
+            self.compact!
             ::File.open(@path, "w") do |io|
                 io.write(self.data.to_yaml)
             end
@@ -153,6 +154,17 @@ module RotateAlternative
         
         def files
             self.data[:files]
+        end
+        
+        ##
+        # Compacts the file specifications.
+        # It removes all empty entries records.
+        #
+        
+        def compact!
+            self.files.reject! do |key, value|
+                value.empty?
+            end
         end
         
         ##
@@ -185,7 +197,9 @@ module RotateAlternative
         
         def each_file
             self.files.each_pair do |path, data|
-                yield path, StateModule::File::new(path, data)
+                if not data.nil?
+                    yield path, StateModule::File::new(path, data)
+                end
             end
         end
         
@@ -380,7 +394,11 @@ module RotateAlternative
             #
             
             def directory
-                @data[:directory].to_sym
+                if @data.has_key? :directory 
+                    @data[:directory].to_sym
+                else
+                    nil
+                end
             end
             
             ##

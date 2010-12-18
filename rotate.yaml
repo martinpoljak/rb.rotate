@@ -170,7 +170,7 @@ dirs:
         #   <some formatting string>
         #
 
-        identifier: numeric
+        identifier: xxx
         
         ##
         # Says by which actions archive. Some daemons keep logs open, so 
@@ -217,4 +217,4 @@ dirs:
         #
         
         #action: move + create
-        action: copy
+        action: append

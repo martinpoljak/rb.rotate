@@ -50,11 +50,11 @@ module RotateAlternative
                 if not self.state.directory.nil?
                     @directory = Directory::new(self.state.directory)
                 else
-                    @directory = Configuration::find_path(File.dirname(@path))
+                    @directory = Configuration::find_path(::File.dirname(@path.to_s))
                 end
                     
                 if @directory.nil?
-                    raise Exception::new("File from directory which isn't convered by rotate-alternative found: " << @path << ".")
+                    raise Exception::new("File from directory which isn't convered by rotate-alternative found: " << @path.to_s  << ".")
                 end
             end
             

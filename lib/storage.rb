@@ -72,7 +72,7 @@ module RotateAlternative
             # Does them
             actions.each do |action|
                 case action
-                    when :move, :copy
+                    when :move, :copy, :append
                         StorageModule::Entry::new(self, file).put! action
                     when :remove
                         file.remove!
@@ -450,6 +450,10 @@ module RotateAlternative
                         FileUtils.copy(@entry.file.path, self.path)
                     when :move
                         FileUtils.move(@entry.file.path, self.path)
+                    when :append
+                        ::File.open(self.path, "a") do |io|
+                            io.write(::File.read(@entry.file.path))
+                        end
                     else
                         raise Exception::new("Invalid allocating method.")
                 end
