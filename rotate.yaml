@@ -10,9 +10,16 @@ paths:
     #
     
     state file: ./rotate-alternative.status
+    
+    ## 
+    # Contains location of the file with default values. Content of this
+    # file is merged with this file. You sholdn't need edit it.
+    #
+    
+    defaults file: ./defaults.yaml
 
 hooks:
-    #something: /path/to/some/script %filepath
+    # something: /path/to/some/script %filepath
 
 dirs:
  
@@ -76,7 +83,7 @@ dirs:
         # support the same base syntax and '<command> <file>' order
         # as gzip and bzip2. You can specify it both as path with 
         # parameters or simply shell command. Uses gzip --best as 
-        # default.
+        # default if set to 'yes'.
         #
         # It's also necessary specify the extension because without it
         # rotate cannot detect compressed filenames.
@@ -94,7 +101,8 @@ dirs:
         
         ##
         # Says which command use for decompression. It expects the same 
-        # base syntax as gunzip or bunzip2. Uses gunzip as default. 
+        # base syntax as gunzip or bunzip2. Uses gunzip as default if 
+        # set to 'yes'.
         #
         # Be warn, decompress option must be synchronized with the 
         # compress option. Logically, if you set rotate up for 
@@ -149,7 +157,7 @@ dirs:
         # appropriate quantity of kilobytes, megabytes and gigabytes.
         #
         # Default value:
-        #   nothing
+        #   20M
         #
         
         max size: 2K

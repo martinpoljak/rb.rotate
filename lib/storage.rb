@@ -1,9 +1,5 @@
 # encoding: utf-8
 
-require "pony"
-require "etc"
-require "socket"
-
 require "lib/storage/entry"
 require "lib/file"
 require "lib/configuration"

@@ -89,6 +89,10 @@ module RotateAlternative
                     raise Exception("No e-mail address specified for sending log to.")
                 end
                 
+                require "etc"
+                require "socket"
+                require "pony"
+                
                 Pony.mail(
                     :from => Etc.getlogin.dup << "@" << Socket.gethostname,
                     :to => to,

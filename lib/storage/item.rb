@@ -153,6 +153,10 @@ module RotateAlternative
                 to = @entry.storage.directory.configuration[:mail]
                 self.decompress!
                 
+                require "etc"
+                require "socket"
+                require "pony"
+                
                 Pony.mail(
                     :from => Etc.getlogin.dup << "@" << Socket.gethostname,
                     :to => to,

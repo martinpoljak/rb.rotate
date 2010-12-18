@@ -164,6 +164,23 @@ module RotateAlternative
                     end
                 end
             end
+            
+            defaults = YAML.load(::File.read(@data[:paths][:"defaults file"]))
+            
+            # Merges with defaults
+            defaults.each_pair do |name, section|
+                name = name.to_sym
+                if not @data.has_key? name
+                    @data[name] = value
+                elsif section.kind_of? Hash
+                    section.each_pair do |key, value|
+                        key = key.to_sym
+                        if not @data[name].has_key? key
+                            @data[name][key] = value
+                        end
+                    end
+                end
+            end
         end
         
         ##

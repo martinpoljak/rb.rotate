@@ -1,0 +1,24 @@
+# YAML
+
+# Contains defaults for the configuration file.
+# You SHOULDN'T need edit it.
+
+paths:
+    state file: ./rotate-alternative.state
+    defaults file: ./defaults.yaml
+
+dirs:
+    default:
+        directory: ./test/log
+        recursive: yes
+        follow: true
+        storage: ./archive
+        compress: yes
+        decompress: yes
+        rotate: 5
+        period: weekly
+        max size: 20M
+        mail: root@localhost
+        recycle: remove
+        identifier: numeric
+        action: move + create
