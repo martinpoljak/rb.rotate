@@ -97,6 +97,22 @@ module RotateAlternative
         end
         
         ##
+        # Returns item identifier of the storage.
+        #
+        
+        def item_identifier
+            self.directory.configuration[:identifier]
+        end
+        
+        ##
+        # Indicates numeric identifier.
+        #
+        
+        def numeric_identifier?
+            self.item_identifier.to_sym == :numeric
+        end
+        
+        ##
         # Removes orphans.
         #
         
@@ -286,7 +302,7 @@ module RotateAlternative
             #
             
             @identifier
-            attr_reader :identifier
+            attr_writer :identifier
             
             ##
             # Full path of the item.
@@ -304,7 +320,7 @@ module RotateAlternative
             # Constructor.
             #
             
-            def initialize(entry, identifier = 1, path = nil)
+            def initialize(entry, identifier = nil, path = nil)
                 @entry = entry
                 @identifier = identifier
                 
@@ -321,22 +337,24 @@ module RotateAlternative
             #
 
             def rotate!
-                ##
-                # Unregisters old filename, increases counter
-                # and register it again.
-                #
-                
-                self.unregister!
-                
-                if self.exists?
-                    old_path = self.path
-                    @identifier += 1
-                    self.rebuild_path!
-                    FileUtils.move(old_path, self.path)
+                if @entry.storage.numeric_identifier? and (self.identifier.kind_of? Numeric)
+                    ##
+                    # Unregisters old filename, increases counter
+                    # and register it again.
+                    #
                     
-                    self.register!
+                    self.unregister!
+                    
+                    if self.exists?
+                        old_path = self.path
+                        self.identifier += 1
+                        self.rebuild_path!
+                        FileUtils.move(old_path, self.path)
+
+                        self.register!
+                    end
                 end
-                
+                    
                 return self
             end
             
@@ -374,6 +392,30 @@ module RotateAlternative
             end
             
             ##
+            # Returns identifier.
+            #
+            
+            def identifier
+                if @identifier.nil?
+                    if @entry.storage.numeric_identifier?
+                        @identifier = 1
+                    else
+                        item_identifier = @entry.storage.item_identifier
+                        
+                        if item_identifier.to_sym == :date
+                            format = "%Y%m%d.%H%M"
+                        else
+                            format = item_identifier
+                        end
+                        
+                        @identifier = Time::now.strftime(format)
+                    end
+                end
+                
+                return @identifier
+            end
+            
+            ##
             # Returns path.
             #
             
@@ -391,7 +433,7 @@ module RotateAlternative
             
             def rebuild_path!
                 state = @entry.file.state
-                @path = @entry.storage.directory.configuration[:storage].dup << "/" << state.name << "." << @identifier.to_s
+                @path = @entry.storage.directory.configuration[:storage].dup << "/" << state.name << "." << self.identifier.to_s
                 
                 if not state.extension.nil?
                     @path << "." << state.extension
