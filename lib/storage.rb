@@ -1,5 +1,9 @@
 # encoding: utf-8
 
+require "pony"
+require "etc"
+require "socket"
+
 require "lib/storage/entry"
 require "lib/file"
 require "lib/configuration"
@@ -64,23 +68,29 @@ module RotateAlternative
         #
         
         def do_actions!(file)
+            entry = StorageModule::Entry::new(self, file)
         
             # Loads them
             actions = @directory.configuration[:action].split("+")
-            actions.each { |i| i.strip! }
-            actions.map! { |i| i.to_sym }
+            actions.map! do |i| 
+                i.strip!
+                k, v = i.split(":", 2)
+                [k.to_sym, v]
+            end
             
             # Does them
-            actions.each do |action|
+            actions.each do |action, arguments|
                 case action
                     when :move, :copy, :append
-                        StorageModule::Entry::new(self, file).put! action
+                        entry.put! action
                     when :remove
                         file.remove!
                     when :create
                         file.create!
                     when :truncate
                         file.truncate!
+                    when :mail
+                        entry.mail! arguments
                     else
                         # TODO: hooks
                 end

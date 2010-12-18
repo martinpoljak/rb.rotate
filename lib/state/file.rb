@@ -112,16 +112,10 @@ module RotateAlternative
                     cut = 0..-2
                 end
                 
-                compressed = file.directory.configuration[:compress]
-                if compressed
-                    compressed = true
-                end
-                
                 new = {
                     :date => Time::now,
                     :items => { },
                     :directory => file.directory.identifier,
-                    :compressed => compressed,
                     :filename => {
                         :name => ::File.basename(file.path, extension.to_s)[cut],
                         :extension => extension
@@ -129,14 +123,6 @@ module RotateAlternative
                 }
                 
                 @data.replace(new)
-            end
-            
-            ##
-            # Indicates file is compressed.
-            #
-            
-            def compressed?
-                @data[:compressed]
             end
             
             ##

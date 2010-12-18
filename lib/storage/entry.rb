@@ -78,6 +78,26 @@ module RotateAlternative
             end
             
             ##
+            # Mail file to specified address.
+            #
+            
+            def mail!(to)
+                if to.nil?
+                    to = @storage.directory.configuration[:mail]
+                end
+                if to.nil?
+                    raise Exception("No e-mail address specified for sending log to.")
+                end
+                
+                Pony.mail(
+                    :from => Etc.getlogin.dup << "@" << Socket.gethostname,
+                    :to => to,
+                    :subject => "Recycled Log: " << self.file.path,
+                    :body => ::File.read(self.file.path)
+                )
+            end
+            
+            ##
             # Traverses through all items.
             #
             

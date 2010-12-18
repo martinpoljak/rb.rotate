@@ -78,11 +78,14 @@ dirs:
         # parameters or simply shell command. Uses gzip --best as 
         # default.
         #
+        # It's also necessary specify the extension because without it
+        # rotate cannot detect compressed filenames.
+        #
         # Default value:
         #   no
         #
         # Possible values:
-        #   <command>
+        #   [<command>, <extension>]
         #   yes
         #   no
         #
@@ -91,7 +94,14 @@ dirs:
         
         ##
         # Says which command use for decompression. It expects the same 
-        # base syntax as gunzip or bunzip2. Uses gunzip as default.
+        # base syntax as gunzip or bunzip2. Uses gunzip as default. 
+        #
+        # Be warn, decompress option must be synchronized with the 
+        # compress option. Logically, if you set rotate up for 
+        # compressing the logs, you must temporarily decompress them in 
+        # archive before appending content to them or mailing them.
+        # If you turn off the compressing without decompressing enabled,
+        # it will cause damaged archive, of sure.
         #
         # Default value:
         #   no
@@ -99,7 +109,7 @@ dirs:
         # Possible values:
         #   <command>
         #   yes
-        #   no        
+        #   no
         #
         
         decompress: yes
@@ -143,6 +153,30 @@ dirs:
         #
         
         max size: 2K
+        
+        ##
+        # Says to which e-mail address send recycled log or eventually
+        # the undefined mail action result.
+        #
+        # Default value:
+        #   nothig
+        #
+        
+        mail: root@localhost
+        
+        ##
+        # Says how to recycle mail removed from archive. It can be 
+        # removed or removed and mailed to mail specified in 'mail' 
+        # option.
+        #
+        # Default value:
+        #   remove
+        #
+        # Possible values:
+        #   remove
+        #   mail
+        
+        recycle: mail
         
         ##
         # Says which type of archive distinguisher rotate will use.
@@ -191,7 +225,7 @@ dirs:
         #   <some formatting string>
         #
 
-        identifier: xxx
+        identifier: numeric
         
         ##
         # Says by which actions archive. Some daemons keep logs open, so 

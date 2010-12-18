@@ -32,10 +32,10 @@ module RotateAlternative
             @path
             
             ##
-            # Date of the item.
+            # Data of the item.
             #
             
-            @date
+            @data
             
             ##
             # Constructor.
@@ -44,13 +44,32 @@ module RotateAlternative
             def initialize(entry, identifier = nil, path = nil)
                 @entry = entry
                 @identifier = identifier
-                
+                @path = path
+            end
+            
+            ##
+            # Returns data.
+            #
+            
+            def data
                 if not path.nil?
-                    @path = path
-                    @date = State::get.archive.file(@path)
-                else
-                    @date = Time::now
+                    @data = State::get.archive.file(@path)
                 end
+                
+                # Default
+                if path.nil? or @data.nil?
+                    compression = @entry.storage.directory.configuration[:compress]
+                    if compression === true
+                        compression = ["gzip --best", "gz"]
+                    end
+                    
+                    @data = {
+                        :date => Time::now,
+                        :compression => compression
+                    }
+                end
+                
+                return @data
             end
             
             ##
@@ -80,6 +99,14 @@ module RotateAlternative
             end
             
             ##
+            # Returns state object.
+            #
+            
+            def state
+                @entry.file.state
+            end
+            
+            ##
             # Indicates, item still exists in storage.
             #
             
@@ -92,7 +119,7 @@ module RotateAlternative
             #
             
             def register!
-                State::archive.register_file(self.path, @date)
+                State::archive.register_file(self.path, self.data)
             end
             
             ##
@@ -109,7 +136,20 @@ module RotateAlternative
             
             def remove!
                 self.unregister!
+                
+                # Eventually mails it if required
+                if @entry.storage.directory.configuration[:recycle].to_sym == :mail
+                    self.mail!
+                end
+                
                 FileUtils.remove(self.path)
+            end
+            
+            ##
+            # Mails the file.
+            #
+            
+            def mail!
             end
             
             ##
@@ -153,11 +193,14 @@ module RotateAlternative
             #
             
             def rebuild_path!
-                state = @entry.file.state
-                @path = @entry.storage.directory.configuration[:storage].dup << "/" << state.name << "." << self.identifier.to_s
+                @path = @entry.storage.directory.configuration[:storage].dup << "/" << self.state.name.to_s << "." << self.identifier.to_s
                 
-                if not state.extension.nil?
-                    @path << "." << state.extension
+                if not self.state.extension.nil?
+                    @path << "." << self.state.extension
+                end
+                
+                if self.compression
+                    @path << "." << self.compression[1]
                 end
             end
             
@@ -172,16 +215,14 @@ module RotateAlternative
                     when :move
                         FileUtils.move(@entry.file.path, self.path)
                     when :append
-                        self.append!
+                        self.append!(:"no compress")
                     else
                         raise Exception::new("Invalid allocating method.")
                 end
                 
-                if @entry.storage.compressed?
-                    self.compress!
-                end
-                
+                self.compress!                
                 self.register!
+                
                 return self
             end
             
@@ -189,14 +230,29 @@ module RotateAlternative
             # Appends to item.
             #
             
-            def append!
-                if @entry.file.state.compressed?
-                    self.decompress!
-                end
+            def append!(compress = :compress)
+                self.decompress!
                 
                 ::File.open(self.path, "a") do |io|
                     io.write(::File.read(@entry.file.path))
                 end                
+                
+                if compress == :compress
+                    self.compress!
+                end
+            end
+            
+            ##
+            # Indicates file is or file should be compressed.
+            #
+            
+            def compressed?
+                result = self.data[:compression]
+                if result.kind_of? Array
+                    result = true
+                end
+                
+                return result
             end
             
             ##
@@ -204,14 +260,12 @@ module RotateAlternative
             #
             
             def compress!
-                command = @entry.storage.directory.configuration[:compress]
-                if command === true
-                    command = "gzip --best"
-                else
-                    command = command.dup
+                if self.compressed?
+                    command, extension = self.compression
+                    target = self.path[0...-(extension.length + 1)]
+                    FileUtils.move(self.path, target)
+                    system(command.dup << " " << target)
                 end
-                
-                system(command << " " << self.path)
             end
             
             ##
@@ -219,14 +273,20 @@ module RotateAlternative
             #
             
             def decompress!
-                command = @entry.storage.directory.configuration[:decompress]
-                if command === true
-                    command = "gunzip"
-                else
-                    command = command.dup
+                if self.compressed? and self.exists?
+                    command, extension = self.compression
+                    system(command.dup << " " << self.path << " 2> /dev/null")
+                    target = self.path[0...-(extension.length + 1)]
+                    FileUtils.move(target, self.path)
                 end
-               
-                system(command << " " << self.path << " 2> /dev/null")
+            end
+            
+            ##
+            # Describes compression.
+            #
+            
+            def compression
+                self.data[:compression]
             end
             
             ##
@@ -234,7 +294,7 @@ module RotateAlternative
             #
             
             def created_at
-                @date
+                self.data[:date]
             end
             
             ##
