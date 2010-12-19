@@ -37,7 +37,7 @@ dirs:
         #   /var/log
         #
         
-        directory: ./test/log
+        directory: ./test
         
         ##
         # Says if archiving will be performed in subdirs of the 
@@ -56,7 +56,7 @@ dirs:
         #   yes
         #
         
-        recursive: yes
+        recursive: flat
         
         ##
         # Says, it should follow symbolic links by transparent way. In 
@@ -321,4 +321,4 @@ dirs:
         #
         
         #action: move + create
-        action: move + create
+        action: copy

@@ -46,7 +46,7 @@ module RotateAlternative
                 @entry = entry
                 @identifier = identifier
                 @path = path
-                
+
                 # Loads data
                 self.load_data!
             end
@@ -208,7 +208,6 @@ module RotateAlternative
             
             def target_path
                 if self.compressed?
-                    puts self.path
                     extension = self.compression[:extension]
                     result = self.path[0...-(extension.length + 1)]
                 else
@@ -223,12 +222,25 @@ module RotateAlternative
             #
             
             def rebuild_path!
-                @path = @entry.storage.directory.configuration[:storage].dup << "/" << self.state.name.to_s << "." << self.identifier.to_s
+                directory = @entry.storage.directory
+                configuration = directory.configuration
+                @path = configuration[:storage].dup << "/"
                 
+                # Adds archive subdirectories structure if necessary
+                recursive = configuration[:recursive]
+                if (recursive.kind_of? TrueClass) or (configuration[:recursive].to_sym != :flat)
+                    @path << directory.relative_path << "/"
+                end
+                
+                # Adds filename
+                @path << self.state.name.to_s << "." << self.identifier.to_s
+                
+                # Adds extension if necessary
                 if not self.state.extension.nil?
                     @path << "." << self.state.extension
                 end
-                
+                                
+                # Adds compression extension if necessary
                 if self.compressed?
                     @path << "." << self.compression[:extension]
                 end
@@ -239,6 +251,8 @@ module RotateAlternative
             #
 
             def allocate(method)
+                FileUtils.mkdir_p(::File.dirname(self.path))
+                
                 case method
                     when :copy
                         FileUtils.copy(@entry.file.path, self.path)

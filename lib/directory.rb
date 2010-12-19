@@ -26,6 +26,13 @@ module RotateAlternative
         @parent
         
         ##
+        # Indicates, it isn't child directory of configured directory,
+        # but directly the configured directory.
+        #
+        
+        @configured 
+        
+        ##
         # Holds directory identifier.
         #
         
@@ -68,17 +75,32 @@ module RotateAlternative
                     
                     if not directory.nil?
                         @identifier = directory.identifier
+                        @configured = true
                     elsif not @parent.nil?
                         @identifier = @parent.identifier
+                        @configured = false
                     else
                         @identifier = :default
+                        @configured = false
                     end
+                else
+                    @configured = true
                 end
                 
                 @configuration = DirectoryConfiguration::new(@identifier)
             end
             
             return @configuration
+        end
+        
+        ##
+        # Indicates, it isn't child directory of configured directory,
+        # but directly the configured directory.
+        #
+        
+        def configured?
+            self.configuration
+            @configured
         end
         
         ##
@@ -93,6 +115,32 @@ module RotateAlternative
                 @path
             else
                 self.configuration.directory
+            end
+        end
+        
+        ##
+        # Returns relative path to parent (configured) directory.
+        #
+        
+        def relative_path
+            if self.configured?
+                ""
+            else
+                self.path[(self.configured_ancestor.path.length + 1)..-1]
+            end
+        end
+        
+        ##
+        # Returns the "nearest" configured ancestor.
+        #
+        
+        def configured_ancestor
+            if self.configured?
+                self
+            elsif not @parent.nil?
+                @parent.configured_ancestor
+            else
+                nil
             end
         end
         
