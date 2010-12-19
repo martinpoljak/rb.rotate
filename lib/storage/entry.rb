@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require "lib/storage/item"
+require "lib/mail"
 
 module RotateAlternative
     module StorageModule
@@ -91,12 +92,11 @@ module RotateAlternative
                 
                 require "etc"
                 require "socket"
-                require "pony"
-                
-                Pony.mail(
+
+                Mail::send(
                     :from => Etc.getlogin.dup << "@" << Socket.gethostname,
                     :to => to,
-                    :subject => "Log: " << self.file.path,
+                    :subject => Socket.gethostname.dup << " : log : " << self.file.path,
                     :body => ::File.read(self.file.path)
                 )
             end

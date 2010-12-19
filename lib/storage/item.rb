@@ -2,6 +2,7 @@
 
 require "fileutils"
 require "lib/state"
+require "lib/mail"
 
 module RotateAlternative
     module StorageModule
@@ -15,7 +16,7 @@ module RotateAlternative
             ##
             # Parent entry.
             #
-            
+
             @entry
             
             ##
@@ -45,31 +46,29 @@ module RotateAlternative
                 @entry = entry
                 @identifier = identifier
                 @path = path
+                
+                # Loads data
+                self.load_data!
             end
             
             ##
             # Returns data.
             #
             
-            def data
-                if not path.nil?
-                    @data = State::get.archive.file(@path)
-                end
-                
-                # Default
-                if path.nil? or @data.nil?
-                    compression = @entry.storage.directory.configuration[:compress]
-                    if compression === true
-                        compression = ["gzip --best", "gz"]
+            def load_data!
+                if @data.nil?
+                    if not @path.nil?
+                        @data = State::get.archive.file(@path)
                     end
                     
-                    @data = {
-                        :date => Time::now,
-                        :compression => compression
-                    }
+                    # Default
+                    if @path.nil? or @data.nil?
+                        @data = {
+                            :date => Time::now,
+                            :compression => false
+                        }
+                    end
                 end
-                
-                return @data
             end
             
             ##
@@ -119,7 +118,7 @@ module RotateAlternative
             #
             
             def register!
-                State::archive.register_file(self.path, self.data)
+                State::archive.register_file(self.path, @data)
             end
             
             ##
@@ -155,9 +154,8 @@ module RotateAlternative
                 
                 require "etc"
                 require "socket"
-                require "pony"
                 
-                Pony.mail(
+                Mail::send(
                     :from => Etc.getlogin.dup << "@" << Socket.gethostname,
                     :to => to,
                     :subject => "Log: " << self.path,
@@ -209,8 +207,15 @@ module RotateAlternative
             #
             
             def target_path
-                extension = self.compression[1]
-                self.path[0...-(extension.length + 1)]
+                if self.compressed?
+                    puts self.path
+                    extension = self.compression[:extension]
+                    result = self.path[0...-(extension.length + 1)]
+                else
+                    result = self.path
+                end
+                
+                return result
             end
             
             ##
@@ -224,8 +229,8 @@ module RotateAlternative
                     @path << "." << self.state.extension
                 end
                 
-                if self.compression
-                    @path << "." << self.compression[1]
+                if self.compressed?
+                    @path << "." << self.compression[:extension]
                 end
             end
             
@@ -272,7 +277,7 @@ module RotateAlternative
             #
             
             def compressed?
-                result = self.data[:compression]
+                result = @data[:compression]
                 if result.kind_of? Array
                     result = true
                 end
@@ -285,10 +290,33 @@ module RotateAlternative
             #
             
             def compress!
-                if self.compressed?
-                    command = self.compression[0]
-                    FileUtils.move(self.path, self.target_path)
-                    system(command.dup << " " << self.target_path)
+            
+                # Checking out configuration
+                configuration = @entry.storage.directory.configuration
+                command, extension = configuration[:compress]
+                decompress = configuration[:decompress]
+
+                if not command.kind_of? FalseClass
+                
+                    # Setting file settings according to current 
+                    # configuration parameters
+                    
+                    if command.kind_of? TrueClass
+                        command = "gzip --best"
+                        extension = "gz"
+                    end
+                    if decompress.kind_of? TrueClass
+                        decompress = "gunzip"
+                    end
+               
+                    @data[:compression] = {
+                        :decompress => decompress,
+                        :extension => extension
+                    }
+                    
+                    # Compress
+                    system(command.dup << " " << self.path)
+                    self.rebuild_path!
                 end
             end
             
@@ -298,7 +326,7 @@ module RotateAlternative
             
             def decompress!
                 if self.compressed? and self.exists?
-                    command = self.compression[0]
+                    command = self.compression[:decompress]
                     system(command.dup << " " << self.path << " 2> /dev/null")
                     FileUtils.move(self.target_path, self.path)
                 end
@@ -309,7 +337,7 @@ module RotateAlternative
             #
             
             def compression
-                self.data[:compression]
+                @data[:compression]
             end
             
             ##
@@ -317,7 +345,7 @@ module RotateAlternative
             #
             
             def created_at
-                self.data[:date]
+                @data[:date]
             end
             
             ##

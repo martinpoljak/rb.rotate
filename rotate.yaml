@@ -86,7 +86,9 @@ dirs:
         # default if set to 'yes'.
         #
         # It's also necessary specify the extension because without it
-        # rotate cannot detect compressed filenames.
+        # rotate cannot detect compressed filenames. If you change 
+        # compression method, all archived logs will be recompressed 
+        # during next rotation.
         #
         # Default value:
         #   no
@@ -312,4 +314,4 @@ dirs:
         #
         
         #action: move + create
-        action: mail:root@localhost + move + create
+        action: copy
