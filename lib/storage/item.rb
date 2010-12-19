@@ -87,7 +87,9 @@ module RotateAlternative
                     if self.exists?
                         old_path = self.path
                         self.identifier += 1
+                        
                         self.rebuild_path!
+                        self.prepare_directory!
                         FileUtils.move(old_path, self.path)
 
                         self.register!
@@ -247,12 +249,24 @@ module RotateAlternative
             end
             
             ##
+            # Prepares directory.
+            #
+            
+            def prepare_directory!
+                directory = FileUtils.mkdir_p(::File.dirname(self.path)).first
+                State::archive.register_directory(directory)
+            end
+            
+            ##
             # Allocates new record.
             #
 
             def allocate(method)
-                FileUtils.mkdir_p(::File.dirname(self.path))
+            
+                # Prepares directory
+                self.prepare_directory!
                 
+                # Allocates by required action
                 case method
                     when :copy
                         FileUtils.copy(@entry.file.path, self.path)

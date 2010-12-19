@@ -56,7 +56,7 @@ dirs:
         #   yes
         #
         
-        recursive: flat
+        recursive: yes
         
         ##
         # Says, it should follow symbolic links by transparent way. In 
