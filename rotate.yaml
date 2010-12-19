@@ -299,6 +299,13 @@ dirs:
         # another hook will get parameters defined by YAML encoded 
         # hash array.
         #
+        # Parameters are kept through the chain of actions, they are 
+        # only overwritten by each action, so if action one will generate
+        # some argument and preceding action has generated another two
+        # arguments, these two arguments will be available for hooks
+        # after the action one too and the third argument will be 
+        # available with new value set by action one.
+        #
         #
         # Possible values:
         #   - move

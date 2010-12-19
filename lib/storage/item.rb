@@ -158,7 +158,7 @@ module RotateAlternative
                 Mail::send(
                     :from => Etc.getlogin.dup << "@" << Socket.gethostname,
                     :to => to,
-                    :subject => "Log: " << self.path,
+                    :subject => Socket.gethostname << " : log : " << self.path,
                     :body => ::File.read(self.target_path)
                 )
                 

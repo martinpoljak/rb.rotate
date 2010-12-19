@@ -78,17 +78,16 @@ module RotateAlternative
             actions.each do |action, arguments|
                 case action
                     when :move, :copy, :append
-                        entry.put! action
+                        variables[:filepath] = entry.put! action
                     when :remove
-                        file.remove!
-                    when :create
-                        file.create!
-                    when :truncate
-                        file.truncate!
+                        variables[:filepath] = file.remove!
+                    when :create, :truncate
+                        variables[:filepath] = file.create!
                     when :mail
-                        entry.mail! arguments
-                    else
-                        # TODO: hooks
+                        variables[:filepath] = entry.mail! arguments
+                    when :hook
+                        # TODO: problem, name is first argument
+                        variables = Hook::new(action, arguments, variables).run!
                 end
             end
         end

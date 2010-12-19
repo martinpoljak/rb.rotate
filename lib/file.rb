@@ -67,6 +67,7 @@ module RotateAlternative
         
         def remove!
             FileUtils.remove_file(@path)
+            return @path
         end
         
         ##
@@ -74,7 +75,8 @@ module RotateAlternative
         #
         
         def create!
-            ::File.open(@path, "w")
+            ::File.open(@path, "w").close()
+            return @path
         end
         
         ##

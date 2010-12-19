@@ -64,6 +64,8 @@ module RotateAlternative
                 
                 self.file.state.touch!
                 self.file.state.items = new_list
+                
+                return self.file.path
             end
             
             ##
@@ -99,6 +101,8 @@ module RotateAlternative
                     :subject => Socket.gethostname.dup << " : log : " << self.file.path,
                     :body => ::File.read(self.file.path)
                 )
+                
+                return self.file.path
             end
             
             ##
