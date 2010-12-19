@@ -321,4 +321,4 @@ dirs:
         #
         
         #action: move + create
-        action: copy
+        action: move + create

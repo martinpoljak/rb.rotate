@@ -75,6 +75,8 @@ module RotateAlternative
             end
             
             # Does them
+            variables = { }
+            
             actions.each do |action, arguments|
                 case action
                     when :move, :copy, :append
@@ -86,8 +88,8 @@ module RotateAlternative
                     when :mail
                         variables[:filepath] = entry.mail! arguments
                     when :hook
-                        # TODO: problem, name is first argument
-                        variables = Hook::new(action, arguments, variables).run!
+                        name, arguments = arguments.split(":", 2)
+                        variables.merge! Hook::new(name.to_sym, arguments, variables).run!
                 end
             end
         end

@@ -106,7 +106,17 @@ module RotateAlternative
         #
         
         def parse_result(result)
-            YAML.load(result)
+            if result.strip.empty?
+                return { }
+            end
+        
+            result = YAML.load(result)
+            if not result.kind_of? Hash
+                result = { }
+                STDERR.write("Warning: result of hook '" << @name.to_s << "' wasn't YAML collection. Ignored.")
+            end
+            
+            return result
         end
         
         ##

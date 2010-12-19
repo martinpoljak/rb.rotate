@@ -33,12 +33,19 @@ module RotateAlternative
         @state
         
         ##
+        # Holds stat informations about the (original) file.
+        #
+        
+        @stat
+        
+        ##
         # Constructor.
         #
         
         def initialize(path, directory = nil)
             @directory = directory
             @path = path
+            @stat = ::File.stat(@path.to_s)
         end
         
         ##
@@ -76,6 +83,14 @@ module RotateAlternative
         
         def create!
             ::File.open(@path, "w").close()
+            
+            # Sets access rights and ownership according to 
+            # stat information
+            if not @stat.nil?
+                ::FileUtils.chmod(@stat.mode, @path)
+                ::FileUtils.chown(@stat.uid, @stat.gid, @path)
+            end
+            
             return @path
         end
         
