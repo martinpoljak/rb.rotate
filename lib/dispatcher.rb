@@ -21,7 +21,11 @@ module RotateAlternative
             
             # Process
             Configuration::each_directory do |directory|
-                directory.rotate!
+                begin
+                    directory.rotate!
+                rescue Exception => e
+                    log "Exception: " << e.to_s
+                end
             end
             
             # Removes orhpans
