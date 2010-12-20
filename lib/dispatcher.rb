@@ -2,6 +2,7 @@
 
 require "lib/configuration"
 require "lib/state"
+require "lib/log"
 
 module RotateAlternative
 
@@ -18,8 +19,10 @@ module RotateAlternative
         def run
             # Reads configuration file
             Configuration::read("./rotate.yaml")
+            log "Configuration file loaded."
             
             # Process
+            log "Start of processing."
             Configuration::each_directory do |directory|
                 begin
                     directory.rotate!
@@ -29,10 +32,12 @@ module RotateAlternative
             end
             
             # Removes orhpans
+            log "Start of orphans removing."
             Storage::remove_orphans!
             
             # Saves state file
             State::save!
+            log "New state saved."
         end
         
     end    
