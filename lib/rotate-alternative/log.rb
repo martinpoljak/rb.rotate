@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "lib/configuration"
+require "rotate-alternative/configuration"
 
 module RotateAlternative
 

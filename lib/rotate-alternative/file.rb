@@ -1,9 +1,9 @@
 # encoding: utf-8
 
 require "fileutils"
-require "lib/storage"
-require "lib/directory"
-require "lib/configuration"
+require "rotate-alternative/storage"
+require "rotate-alternative/directory"
+require "rotate-alternative/configuration"
 
 module RotateAlternative
 

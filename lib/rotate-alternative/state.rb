@@ -1,8 +1,9 @@
 # encoding: utf-8
+
 require "yaml"
-require "lib/configuration"
-require "lib/state/archive"
-require "lib/state/file"
+require "rotate-alternative/configuration"
+require "rotate-alternative/state/archive"
+require "rotate-alternative/state/file"
 
 module RotateAlternative
 

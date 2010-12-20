@@ -1,5 +1,5 @@
 #/usr/bin/env ruby
-$:.push('./lib')
+$:.push("./lib")
 
 require "rotate-alternative"
 RotateAlternative::run!

@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require "yaml"
-require "lib/directory"
+require "rotate-alternative/directory"
 
 module RotateAlternative
 

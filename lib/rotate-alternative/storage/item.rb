@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 require "fileutils"
-require "lib/state"
-require "lib/mail"
+require "rotate-alternative/state"
+require "rotate-alternative/mail"
 
 module RotateAlternative
     module StorageModule

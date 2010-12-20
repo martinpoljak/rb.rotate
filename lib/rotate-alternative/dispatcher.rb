@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require "lib/configuration"
-require "lib/state"
-require "lib/storage"
-require "lib/log"
+require "rotate-alternative/configuration"
+require "rotate-alternative/state"
+require "rotate-alternative/storage"
+require "rotate-alternative/log"
 
 module RotateAlternative
 

@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-require "lib/storage/item"
-require "lib/mail"
+require "rotate-alternative/storage/item"
+require "rotate-alternative/mail"
 
 module RotateAlternative
     module StorageModule

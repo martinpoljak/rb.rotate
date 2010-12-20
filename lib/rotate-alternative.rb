@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "lib/dispatcher"
+require "rotate-alternative/dispatcher"
 
 module RotateAlternative
 

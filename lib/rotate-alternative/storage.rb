@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-require "lib/storage/entry"
-require "lib/file"
-require "lib/configuration"
+require "rotate-alternative/storage/entry"
+require "rotate-alternative/file"
+require "rotate-alternative/configuration"
 
 module RotateAlternative
 
