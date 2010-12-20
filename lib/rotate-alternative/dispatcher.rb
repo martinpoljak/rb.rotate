@@ -2,6 +2,7 @@
 
 require "lib/configuration"
 require "lib/state"
+require "lib/storage"
 require "lib/log"
 
 module RotateAlternative
@@ -16,7 +17,7 @@ module RotateAlternative
         # Runs the rotate session.
         #
         
-        def run
+        def run!
             # Reads configuration file
             Configuration::read("./rotate.yaml")
             log "Configuration file loaded."
