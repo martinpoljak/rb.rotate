@@ -393,7 +393,18 @@ module RotateAlternative
             #
             
             def expired?
-                self.expiration_at < Time::now
+                recycle = @entry.storage.directory.configuration[:recycle]
+                if recycle.kind_of? FalseClass
+                    result = false
+                else
+                    recycle = recycle.to_sym
+                end
+                
+                if recycle and (recycle == :remove) or (recycle == :mail)
+                    result = self.expiration_at < Time::now
+                end
+                
+                return result
             end
             
         end

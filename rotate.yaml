@@ -15,6 +15,9 @@ paths:
     # Contains location of the file with default values. Content of this
     # file is merged with this file. You sholdn't need edit it.
     #
+    # Default value:
+    #   /etc/rotate/defaults.yaml
+    #
     
     defaults file: ./defaults.yaml
 
@@ -38,6 +41,16 @@ dirs:
         #
         
         directory: ./test
+        
+        ##
+        # Defines inheritance. Options missing in the directory settings
+        # are then inherited from the parent directory.
+        #
+        # Default value:
+        #   nothing
+        #
+        
+        #parent: 
         
         ##
         # Says if archiving will be performed in subdirs of the 
@@ -73,7 +86,7 @@ dirs:
         # Directory to which will be logs archived.
         #
         # Default value:
-        #   /var/log
+        #   /var/log/archive
         #   
         
         storage: ./archive
@@ -189,7 +202,7 @@ dirs:
         #   20M
         #
         
-        max size: 2K
+        max size: 20M
         
         ##
         # Says to which e-mail address send recycled log or eventually
@@ -204,7 +217,8 @@ dirs:
         ##
         # Says how to recycle mail removed from archive. It can be 
         # removed or removed and mailed to mail specified in 'mail' 
-        # option.
+        # option. If 'no' or 'keep' option set, old archived logs are 
+        # kept forever.
         #
         # Default value:
         #   remove
@@ -212,8 +226,11 @@ dirs:
         # Possible values:
         #   remove
         #   mail
+        #   keep
+        #   no
+        #
         
-        recycle: mail
+        recycle: remove
         
         ##
         # Says which type of archive distinguisher rotate will use.
@@ -320,5 +337,4 @@ dirs:
         #   move + create
         #
         
-        #action: move + create
-        action: copy
+        action: move + create
