@@ -1,15 +1,15 @@
 Rotate Alternative
 ==================
 
-**Rotate Alternative** is an alternative to classical *logrotate* tool. 
+**Rotate Alternative** is an alternative to classical `logrotate` tool. 
 It brings very similar functionallity, features openess and flexibility 
-of the scripting environment and removes some most known *logrotate* 
+of the scripting environment and removes some most known `logrotate` 
 limitations.
 
 And of sure, it adds some features and it doesn't implement some
 features of the original for now.
 
-### Removed *logrotate* Limitations
+### Removed `logrotate` Limitations
 
 * log directory and archive directory can be on **different drives**,
 * it can **follow symbolic links** both for directories and files,
@@ -19,7 +19,7 @@ features of the original for now.
   
 ### Additional Features
 
-* elegant, well documented and easy-to-understand YAML configuration 
+* elegant, well documented and easy-to-understand [YAML][2] configuration 
   file,
 * flexible and in fact unlimited possibility to define hooks while 
   "put file to archive" action and run them in mix with pre-build 
@@ -47,3 +47,4 @@ Contributing
 6. Enjoy a refreshing Diet Coke and wait.
 
 [1]: http://github.com/martinkozak/rotate-alternative/issues
+[2]: http://www.yaml.org/
