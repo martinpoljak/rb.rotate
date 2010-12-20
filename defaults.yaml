@@ -6,6 +6,7 @@
 paths:
     state file: /var/lib/rotate-alternative.status
     defaults file: /etc/rotate/defaults.yaml
+    log file: /var/log/rotate.log
 
 dirs:
     default:

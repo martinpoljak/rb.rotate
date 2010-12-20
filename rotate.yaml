@@ -20,6 +20,15 @@ paths:
     #
     
     defaults file: ./defaults.yaml
+    
+    ##
+    # Contains path to log file.
+    #
+    # Default value:
+    #   /var/log/rotate.log
+    #
+    
+    log file: ./rotate.log
 
 hooks:
     # something: /path/to/some/script %filepath

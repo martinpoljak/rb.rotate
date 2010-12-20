@@ -3,7 +3,7 @@
 module RotateAlternative
 
     ##
-    # Dispatches all operations.
+    # Mail sender.
     #
     
     class Mail 
