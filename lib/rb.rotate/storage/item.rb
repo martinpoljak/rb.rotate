@@ -231,7 +231,10 @@ module RbRotate
                 # Adds archive subdirectories structure if necessary
                 recursive = configuration[:recursive]
                 if (recursive.kind_of? TrueClass) or (configuration[:recursive].to_sym != :flat)
-                    @path << directory.relative_path << "/"
+                    relative_path = directory.relative_path
+                    if relative_path != ?.
+                        @path << relative_path << "/"
+                    end
                 end
                 
                 # Adds filename

@@ -42,7 +42,8 @@ Gem::Specification.new do |s|
     "lib/rb.rotate/state/file.rb",
     "lib/rb.rotate/storage.rb",
     "lib/rb.rotate/storage/entry.rb",
-    "lib/rb.rotate/storage/item.rb"
+    "lib/rb.rotate/storage/item.rb",
+    "rb.rotate.gemspec"
   ]
   s.homepage = %q{http://github.com/martinkozak/rb.rotate}
   s.licenses = ["MIT"]

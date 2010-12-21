@@ -124,7 +124,7 @@ module RbRotate
         
         def relative_path
             if self.configured?
-                ""
+                "."
             else
                 self.path[(self.configured_ancestor.path.length + 1)..-1]
             end
