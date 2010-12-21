@@ -9,17 +9,17 @@ paths:
     #   /var/lib/rb.rotate.status
     #
     
-    state file: ./rb.rotate.status
+    state file: /var/lib/rb.rotate.status
     
     ## 
     # Contains location of the file with default values. Content of this
     # file is merged with this file. You sholdn't need edit it.
     #
     # Default value:
-    #   /etc/rb.rotate/defaults.yaml
+    #   %%configuration/defaults.yaml
     #
     
-    defaults file: ./defaults.yaml
+    defaults file: %%configuration/defaults.yaml
     
     ##
     # Contains path to log file.
@@ -28,7 +28,7 @@ paths:
     #   /var/log/rb.rotate.log
     #
     
-    log file: ./rb.rotate.log
+    log file: /var/log/rb.rotate.log
 
 hooks:
     # something: /path/to/some/script %filepath
@@ -49,7 +49,7 @@ dirs:
         #   /var/log
         #
         
-        directory: ./test
+        directory: /var/log
         
         ##
         # Defines inheritance. Options missing in the directory settings
@@ -86,10 +86,10 @@ dirs:
         # false, they will be silently ignored.
         #
         # Default value:
-        #   true
+        #   yes
         #
         
-        follow: true
+        follow: yes
         
         ##
         # Directory to which will be logs archived.
@@ -98,7 +98,7 @@ dirs:
         #   /var/log/archive
         #   
         
-        storage: ./archive
+        storage: /var/log/archive
         
         ##
         # Says which command use for compressing the log. It must 

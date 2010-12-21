@@ -41,6 +41,54 @@ module rbRotate
             log "New state saved."
         end
         
+        ##
+        # Installs the application configuration files.
+        #
+        
+        def install!
+            require "sys/uname"
+            require "fileutils"
+            
+            basedir = ::File.dirname(__FILE__)
+            
+            # Loads and creates the configuration dir
+            case Sys::Uname.sysname.downcase.to_sym
+                when :freebsd
+                    etc = "/usr/local/etc"
+                when :linux
+                    etc = "/etc"
+                else
+                    raise Exception::new("You are running on an unknown platform. It cannot be problem, but it's necessary define path to configuration file and define paths in configuration file.")
+            end
+            
+            etc << "/rb.rotate"
+            FileUtils.mkdir_p(etc)
+            
+            # Creates other important directories
+            FileUtils.mkdir_p("/var/log")
+            FileUtils.mkdir_p("/var/lib")
+            
+            # Puts configuration files to configuration directory
+            source = basedir.dup << "/install"
+            replacements = { "%%configuration" => etc }
+            files = ["rotate.yaml", "defaults.yaml"]
+            
+            files.each do |file|
+                body = ::File.read(source.dup << "/" << file << ".initial")
+                replacements.each_pair do |key, value|
+                    body.gsub! key, value
+                end
+                File.open(etc.dup << "/" << file, "w") do |io|
+                    io.write(body)
+                end
+            end
+            
+            # Puts to library root path path to configuration directory
+            ::File.open(basedir.dup << "/paths.conf", "w") do |io|
+                io.write(etc.dup << "/rotate.yaml")
+            end
+        end
+        
     end    
     
 end

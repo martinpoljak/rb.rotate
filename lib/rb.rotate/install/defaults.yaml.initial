@@ -5,7 +5,7 @@
 
 paths:
     state file: /var/lib/rb.rotate.status
-    defaults file: /etc/rb.rotate/defaults.yaml
+    defaults file: %%configuration/defaults.yaml
     log file: /var/log/rb.rotate.log
 
 dirs:
