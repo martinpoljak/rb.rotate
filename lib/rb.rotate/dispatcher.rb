@@ -19,7 +19,15 @@ module RbRotate
         
         def run!
             # Reads configuration file
-            path = ::File.read(::File.dirname(__FILE__).dup << "/../paths.conf")
+            locator = ::File.dirname(::File.dirname(__FILE__)).dup << "/paths.conf"
+            if not ::File.exists? locator
+                STDERR.write("FATAL: rb.rotate unconfigured. Please, run 'rb.rotate install' or eventually create the " << locator << " file with path to configuration file. Aborted.\n")
+                exit
+            end
+            
+            path = ::File.read(locator)
+            path.strip!
+            
             Configuration::read(path)
             log "Configuration file loaded."
             
