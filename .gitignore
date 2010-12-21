@@ -40,3 +40,7 @@ pkg
 #
 # For vim:
 #*.swp
+
+archive/*
+test/*
+*.gem
