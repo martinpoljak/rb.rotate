@@ -75,6 +75,6 @@ Copyright
 Copyright (c) 2010 [Martin Kozák][3]. See `LICENSE.txt` for
 further details.
 
-[1]: http://github.com/martinkozak/rotate-alternative/issues
+[1]: http://github.com/martinkozak/rb.rotate/issues
 [2]: http://www.yaml.org/
 [3]: http://www.martinkozak.net/
