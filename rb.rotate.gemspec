@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ["Martin Kozák"]
   s.date = %q{2010-12-21}
   s.default_executable = %q{rb.rotate}
+  s.description = %q{An alternative to classical 'logrotate' tool. It implements very similar functionallity, features openess and flexibility of the scripting environment and removes some most known 'logrotate' limitations.}
   s.email = %q{martinkozak@martinkozak.net}
   s.executables = ["rb.rotate"]
   s.extra_rdoc_files = [
@@ -47,9 +48,17 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/martinkozak/rb.rotate}
   s.licenses = ["MIT"]
+  s.post_install_message = %q{
+INSTALLATION DONE!
+For remaining part of installation run 'rb.rotate install'
+and then eventually setup running the 'rb.rotate' by cron.
+
+Be warn, it's still BETA VERSION.
+
+}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{some text}
+  s.summary = %q{More modern alternative to 'logrotate' with more features and less limitations.}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

@@ -16,12 +16,12 @@ Jeweler::Tasks.new do |gem|
   gem.name = "rb.rotate"
   gem.homepage = "http://github.com/martinkozak/rb.rotate"
   gem.license = "MIT"
-  #gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.summary = %Q{some text}
-  #gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{More modern alternative to 'logrotate' with more features and less limitations.}
+  gem.description = %Q{An alternative to classical 'logrotate' tool. It implements very similar functionallity, features openess and flexibility of the scripting environment and removes some most known 'logrotate' limitations.}
   gem.email = "martinkozak@martinkozak.net"
   gem.authors = ["Martin Kozák"]
   gem.executables = ["rb.rotate"]
+  gem.post_install_message = "\nINSTALLATION DONE!\nFor remaining part of installation run 'rb.rotate install'\nand then eventually setup running the 'rb.rotate' by cron.\n\nBe warn, it's still BETA VERSION.\n\n"
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
   # gem.add_runtime_dependency 'sys-uname', '>= 0.8.5'
