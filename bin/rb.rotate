@@ -1,7 +1,12 @@
 #!/usr/bin/env ruby
 require "rb.rotate"
-if ARGV[0] and ARGV[0].to_sym == :install
-    RbRotate::install!
+if ARGV[0] 
+    case ARGV[0].to_sym
+        when :install
+            RbRotate::install!
+        when :sysname
+            RbRotate::sysname!
+    end
 else
     RbRotate::run!
 end

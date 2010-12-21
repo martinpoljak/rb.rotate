@@ -28,10 +28,24 @@ features of the original for now.
 Installation
 ------------
 
-After installing the `rb.rotate` gem simply type as root:
+After installing the `rb.rotate` gem, simply type as root and then add 
+the `rb.rotate` entry to cron.:
     rb.rotate install
-    
-And then add the `rb.rotate` entry to cron.
+
+Be warn, it works for *Linux* and *FreeBSD* only. On other platforms,
+please: 
+
+1. copy initial configuration files in `<gem-path>/lib/rb.rotate/install` 
+to appropriate location on your platform (remove the `.initial` extension,
+of sure),
+2. create the `<gem-path>/lib/paths.conf` file with path to 
+`rotate.yaml` file,
+3. change paths in `rotate.yaml` file to directories appropriate for 
+your platfom.
+
+If you report the right configuration locations with output of 
+`rb.rotate sysname` back to project, it's no problem to add support for 
+your platform too.
 
 Status
 ------

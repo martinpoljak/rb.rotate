@@ -19,4 +19,12 @@ module RbRotate
         Dispatcher::new::install!
     end
     
+    ##
+    # Prints out the system name.
+    #
+    
+    def self.sysname!
+        Dispatcher::new::sysname!
+    end
+    
 end

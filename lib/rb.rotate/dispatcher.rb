@@ -1,10 +1,5 @@
 # encoding: utf-8
 
-require "rb.rotate/configuration"
-require "rb.rotate/state"
-require "rb.rotate/storage"
-require "rb.rotate/log"
-
 module RbRotate
 
     ##
@@ -18,6 +13,11 @@ module RbRotate
         #
         
         def run!
+            require "rb.rotate/configuration"
+            require "rb.rotate/state"
+            require "rb.rotate/storage"
+            require "rb.rotate/log"
+
             # Reads configuration file
             locator = ::File.dirname(::File.dirname(__FILE__)).dup << "/paths.conf"
             if not ::File.exists? locator
@@ -96,6 +96,15 @@ module RbRotate
             ::File.open(basedir.dup << "/../paths.conf", "w") do |io|
                 io.write(etc.dup << "/rotate.yaml")
             end
+        end
+        
+        ##
+        # Prints out system name.
+        #
+        
+        def sysname!
+            require "sys/uname"
+            puts Sys::Uname.sysname.downcase
         end
         
     end    
