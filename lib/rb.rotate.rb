@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "rb.rotate/dispatcher"
 
-module rbRotate
+module RbRotate
 
     ##
     # Runs the application.
@@ -9,6 +9,14 @@ module rbRotate
     
     def self.run!
         Dispatcher::new::run!
+    end
+
+    ##
+    # Installs the application.
+    #
+    
+    def self.install!
+        Dispatcher::new::install!
     end
     
 end

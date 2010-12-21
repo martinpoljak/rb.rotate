@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "yaml"
 
-module rbRotate
+module RbRotate
 
     ##
     # Represents hook.

@@ -5,7 +5,7 @@ require "rb.rotate/configuration"
 require "rb.rotate/state/archive"
 require "rb.rotate/state/file"
 
-module rbRotate
+module RbRotate
 
     ##
     # Represents state file.

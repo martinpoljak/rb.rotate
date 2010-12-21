@@ -5,7 +5,7 @@ require "rb.rotate/file"
 require "rb.rotate/reader"
 require "rb.rotate/storage"
 
-module rbRotate
+module RbRotate
 
     ##
     # Represents one log directory.

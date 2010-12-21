@@ -3,7 +3,7 @@
 require "yaml"
 require "rb.rotate/directory"
 
-module rbRotate
+module RbRotate
 
     ##
     # Directory configuration.

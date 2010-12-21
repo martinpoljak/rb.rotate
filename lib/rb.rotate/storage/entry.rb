@@ -3,7 +3,7 @@
 require "rb.rotate/storage/item"
 require "rb.rotate/mail"
 
-module rbRotate
+module RbRotate
     module StorageModule
     
         ##

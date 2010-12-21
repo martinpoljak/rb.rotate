@@ -5,7 +5,7 @@ require "rb.rotate/state"
 require "rb.rotate/storage"
 require "rb.rotate/log"
 
-module rbRotate
+module RbRotate
 
     ##
     # Dispatches all operations.
@@ -19,7 +19,8 @@ module rbRotate
         
         def run!
             # Reads configuration file
-            Configuration::read("./rotate.yaml")
+            path = ::File.read(::File.dirname(__FILE__).dup << "/../paths.conf")
+            Configuration::read(path)
             log "Configuration file loaded."
             
             # Process
@@ -78,13 +79,13 @@ module rbRotate
                 replacements.each_pair do |key, value|
                     body.gsub! key, value
                 end
-                File.open(etc.dup << "/" << file, "w") do |io|
+                ::File.open(etc.dup << "/" << file, "w") do |io|
                     io.write(body)
                 end
             end
             
             # Puts to library root path path to configuration directory
-            ::File.open(basedir.dup << "/paths.conf", "w") do |io|
+            ::File.open(basedir.dup << "/../paths.conf", "w") do |io|
                 io.write(etc.dup << "/rotate.yaml")
             end
         end

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "rb.rotate/state"
 
-module rbRotate
+module RbRotate
 
     ##
     # Represents reader of some directory.

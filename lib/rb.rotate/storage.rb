@@ -4,7 +4,7 @@ require "rb.rotate/storage/entry"
 require "rb.rotate/file"
 require "rb.rotate/configuration"
 
-module rbRotate
+module RbRotate
 
     ##
     # Represents storage for archived files.

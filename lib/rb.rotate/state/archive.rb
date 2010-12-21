@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module rbRotate
+module RbRotate
     module StateModule
     
         ##

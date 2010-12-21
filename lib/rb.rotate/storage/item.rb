@@ -4,7 +4,7 @@ require "fileutils"
 require "rb.rotate/state"
 require "rb.rotate/mail"
 
-module rbRotate
+module RbRotate
     module StorageModule
         
         ##
