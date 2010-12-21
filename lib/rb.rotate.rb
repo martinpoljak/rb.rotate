@@ -1,7 +1,7 @@
 # encoding: utf-8
-require "rotate-alternative/dispatcher"
+require "rb.rotate/dispatcher"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Runs the application.

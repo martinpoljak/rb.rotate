@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-require "rotate-alternative/configuration"
-require "rotate-alternative/state"
-require "rotate-alternative/storage"
-require "rotate-alternative/log"
+require "rb.rotate/configuration"
+require "rb.rotate/state"
+require "rb.rotate/storage"
+require "rb.rotate/log"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Dispatches all operations.

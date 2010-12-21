@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require "fileutils"
-require "rotate-alternative/storage"
-require "rotate-alternative/directory"
-require "rotate-alternative/configuration"
+require "rb.rotate/storage"
+require "rb.rotate/directory"
+require "rb.rotate/configuration"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Represents one log file.
@@ -61,7 +61,7 @@ module RotateAlternative
                 end
                     
                 if @directory.nil?
-                    raise Exception::new("File from directory which isn't convered by rotate-alternative found: " << @path.to_s  << ".")
+                    raise Exception::new("File from directory which isn't covered by rb.rotate found: " << @path.to_s  << ".")
                 end
             end
             

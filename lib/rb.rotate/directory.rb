@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-require "rotate-alternative/configuration"
-require "rotate-alternative/file"
-require "rotate-alternative/reader"
-require "rotate-alternative/storage"
+require "rb.rotate/configuration"
+require "rb.rotate/file"
+require "rb.rotate/reader"
+require "rb.rotate/storage"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Represents one log directory.

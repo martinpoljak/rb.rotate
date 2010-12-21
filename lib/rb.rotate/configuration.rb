@@ -1,9 +1,9 @@
 # encoding: utf-8
 
 require "yaml"
-require "rotate-alternative/directory"
+require "rb.rotate/directory"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Directory configuration.

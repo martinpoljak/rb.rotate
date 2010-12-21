@@ -1,10 +1,10 @@
 # encoding: utf-8
 
 require "fileutils"
-require "rotate-alternative/state"
-require "rotate-alternative/mail"
+require "rb.rotate/state"
+require "rb.rotate/mail"
 
-module RotateAlternative
+module rbRotate
     module StorageModule
         
         ##

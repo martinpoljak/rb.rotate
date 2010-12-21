@@ -1,3 +1,0 @@
-#!/usr/bin/env ruby
-require "rotate-alternative"
-RotateAlternative::run!

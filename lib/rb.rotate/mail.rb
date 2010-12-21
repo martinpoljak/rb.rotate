@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Mail sender.

@@ -1,7 +1,7 @@
 # encoding: utf-8
-require "rotate-alternative/configuration"
+require "rb.rotate/configuration"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Logfile.
@@ -75,6 +75,6 @@ class Object
     #
 
     def log(message)
-        RotateAlternative::Log::write(message, self)
+        rbRotate::Log::write(message, self)
     end    
 end

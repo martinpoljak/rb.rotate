@@ -1,7 +1,7 @@
 # encoding: utf-8
-require "rotate-alternative/state"
+require "rb.rotate/state"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Represents reader of some directory.

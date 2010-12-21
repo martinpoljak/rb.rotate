@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-require "rotate-alternative/storage/entry"
-require "rotate-alternative/file"
-require "rotate-alternative/configuration"
+require "rb.rotate/storage/entry"
+require "rb.rotate/file"
+require "rb.rotate/configuration"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Represents storage for archived files.

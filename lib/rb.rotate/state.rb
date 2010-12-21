@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require "yaml"
-require "rotate-alternative/configuration"
-require "rotate-alternative/state/archive"
-require "rotate-alternative/state/file"
+require "rb.rotate/configuration"
+require "rb.rotate/state/archive"
+require "rb.rotate/state/file"
 
-module RotateAlternative
+module rbRotate
 
     ##
     # Represents state file.

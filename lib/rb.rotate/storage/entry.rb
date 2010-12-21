@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require "rotate-alternative/storage/item"
-require "rotate-alternative/mail"
+require "rb.rotate/storage/item"
+require "rb.rotate/mail"
 
-module RotateAlternative
+module rbRotate
     module StorageModule
     
         ##
