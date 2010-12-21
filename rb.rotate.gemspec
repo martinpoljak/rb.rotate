@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ["Martin Kozák"]
   s.date = %q{2010-12-21}
   s.default_executable = %q{rb.rotate}
-  s.description = %q{An alternative to classical 'logrotate' tool. It implements very similar functionallity, features openess and flexibility of the scripting environment and removes some most known 'logrotate' limitations.}
+  s.description = %q{More modern alternative to classical 'logrotate' tool with more features and less limitations. It implements very similar functionality, features openness and flexibility of the scripting environment and removes some most known 'logrotate' limitations.}
   s.email = %q{martinkozak@martinkozak.net}
   s.executables = ["rb.rotate"]
   s.extra_rdoc_files = [
