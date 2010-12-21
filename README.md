@@ -24,6 +24,14 @@ features of the original for now.
 * flexible and in fact unlimited possibility to define hooks while 
   "put file to archive" action and run them in mix with pre-build 
   actions in whatever required order.
+  
+Installation
+------------
+
+After installing the `rb.rotate` gem simply type as root:
+    rb.rotate install
+    
+And then add the `rb.rotate` entry to cron.
 
 Status
 ------
