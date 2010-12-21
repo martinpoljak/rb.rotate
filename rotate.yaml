@@ -6,17 +6,17 @@ paths:
     # Location of the state file (database about log rotation).
     #
     # Default value:
-    #   /var/lib/rotate-alternative.status
+    #   /var/lib/rb.rotate.status
     #
     
-    state file: ./rotate-alternative.status
+    state file: ./rb.rotate.status
     
     ## 
     # Contains location of the file with default values. Content of this
     # file is merged with this file. You sholdn't need edit it.
     #
     # Default value:
-    #   /etc/rotate/defaults.yaml
+    #   /etc/rb.rotate/defaults.yaml
     #
     
     defaults file: ./defaults.yaml
@@ -25,10 +25,10 @@ paths:
     # Contains path to log file.
     #
     # Default value:
-    #   /var/log/rotate.log
+    #   /var/log/rb.rotate.log
     #
     
-    log file: ./rotate.log
+    log file: ./rb.rotate.log
 
 hooks:
     # something: /path/to/some/script %filepath

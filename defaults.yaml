@@ -4,9 +4,9 @@
 # You SHOULDN'T need edit it.
 
 paths:
-    state file: /var/lib/rotate-alternative.status
-    defaults file: /etc/rotate/defaults.yaml
-    log file: /var/log/rotate.log
+    state file: /var/lib/rb.rotate.status
+    defaults file: /etc/rb.rotate/defaults.yaml
+    log file: /var/log/rb.rotate.log
 
 dirs:
     default:
