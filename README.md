@@ -1,10 +1,10 @@
 rb.rotate
 =========
 
-**rb.rotate** is an alternative to classical `logrotate` tool. 
-It implements very similar functionallity, features openess and 
-flexibility of the scripting environment and removes some most known 
-`logrotate` limitations.
+**rb.rotate** is an more modern alternative to classical `logrotate` 
+tool with more features and less limitations. It implements very similar
+functionallity, features openess and flexibility of the scripting 
+environment and removes some most known `logrotate` limitations.
 
 And of sure, it adds some features and it doesn't implement some
 features of the original for now.

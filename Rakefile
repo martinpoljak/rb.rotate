@@ -17,7 +17,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/martinkozak/rb.rotate"
   gem.license = "MIT"
   gem.summary = %Q{More modern alternative to 'logrotate' with more features and less limitations.}
-  gem.description = %Q{An alternative to classical 'logrotate' tool. It implements very similar functionallity, features openess and flexibility of the scripting environment and removes some most known 'logrotate' limitations.}
+  gem.description = %Q{More modern alternative to classical 'logrotate' tool with more features and less limitations. It implements very similar functionality, features openness and flexibility of the scripting environment and removes some most known 'logrotate' limitations.}
   gem.email = "martinkozak@martinkozak.net"
   gem.authors = ["Martin Kozák"]
   gem.executables = ["rb.rotate"]
