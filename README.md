@@ -43,8 +43,9 @@ of sure),
 `rotate.yaml` file,
 3. change paths in `rotate.yaml` file to directories appropriate for 
 your platfom,
-4. [report back][1] to the project output of `rb.rotate sysname` command 
-and appropriate configuration locations for including in next release.
+4. [report back][1] to the project output of the `rb.rotate sysname` 
+command and appropriate configuration locations for including them in 
+next release.
 
 
 Status
