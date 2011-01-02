@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require "yaml"
+require "hash-utils"
 require "rb.rotate/directory"
 
 module RbRotate
@@ -31,7 +32,6 @@ module RbRotate
         #
         
         def initialize(directory)
-            # TODO: this should handle configuration inheritance
             @directory = directory
         end
         
@@ -49,6 +49,7 @@ module RbRotate
 
         def data
             if @data.nil?
+=begin
                 data = self.configuration[:dirs][@directory]
                 @data = { }
                 
@@ -56,7 +57,10 @@ module RbRotate
                 data.each_pair do |key, value|
                     @data[key.to_sym] = value
                 end
-                
+=end
+                @data = self.configuration[:dirs][@directory]
+                @data.keys_to_sym!
+
                 self.handle_inheritance!
             end
             
@@ -150,10 +154,17 @@ module RbRotate
         # 
         
         def read(file)
-            data = YAML.load(::File.read(file))
-            @data = { }
+            @data = YAML.load(::File.read(file))
             
             # Converts strings to symbols
+            @data.keys_to_sym!
+            @data.each_pair do |name, section|
+                if section.kind_of? Hash
+                    section.keys_to_sym!
+                end
+            end
+            
+=begin
             data.each_pair do |name, section|
                 section_data = { }
                 @data[name.to_sym]= section_data
@@ -164,9 +175,10 @@ module RbRotate
                     end
                 end
             end
+=end
             
             defaults = YAML.load(::File.read(@data[:paths][:"defaults file"]))
-            
+
             # Merges with defaults
             defaults.each_pair do |name, section|
                 name = name.to_sym

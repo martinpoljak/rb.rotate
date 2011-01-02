@@ -4,6 +4,7 @@ source "http://rubygems.org"
 
 gem "pony", ">= 1.1"
 gem "sys-uname", ">= 0.8.5"
+gem "hash-utils", ">= 0.1.0"
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
