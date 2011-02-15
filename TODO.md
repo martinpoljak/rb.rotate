@@ -4,3 +4,4 @@
 * consider switch directly to mail gem
 * write correct YARD code documentation
 * switch to 'find' standard library
+* install should use Etc.sysconfdir, so remove the sys-uname dependency
