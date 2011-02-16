@@ -5,3 +5,4 @@
 * write correct YARD code documentation
 * switch to 'find' standard library
 * install should use Etc.sysconfdir, so remove the sys-uname dependency
+* swith to io_splice for file copying
